@@ -23,7 +23,7 @@ def create_lkas11(packer, frame, car_fingerprint, apply_steer, steer_req,
 
   if car_fingerprint == CAR.GENESIS:
     values["CF_Lkas_LdwsActivemode"] = 2
-    values["CF_Lkas_SysWarning"] = lkas11["CF_Lkas_SysWarning"]
+    #values["CF_Lkas_SysWarning"] = lkas11["CF_Lkas_SysWarning"]
 
   elif car_fingerprint in [CAR.K5, CAR.K5_HEV, CAR.K7, CAR.K7_HEV]:
     values["CF_Lkas_LdwsActivemode"] = 0
