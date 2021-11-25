@@ -106,7 +106,7 @@ class CarInterface(CarInterfaceBase):
         ret.wheelbase = 2.805
         ret.steerRatio = 15.8
     elif candidate in [CAR.K7, CAR.K7_HEV]:
-        ret.mass = 1730. + STD_CARGO_KG
+        ret.mass = 1595. + STD_CARGO_KG
         ret.wheelbase = 2.855
         ret.steerRatio = 12.5
     elif candidate == CAR.K9:
@@ -228,9 +228,9 @@ class CarInterface(CarInterfaceBase):
           ret.lateralTuning.lqr.l = [0.33, 0.318]
       elif candidate in [CAR.GRANDEUR, CAR.GRANDEUR_HEV, CAR.GRANDEUR20, CAR.GRANDEUR20_HEV, CAR.K7, CAR.K7_HEV]:
           ret.lateralTuning.init('lqr')
-          ret.lateralTuning.lqr.scale = 1700.
+          ret.lateralTuning.lqr.scale = 1650.
           ret.lateralTuning.lqr.ki = 0.01
-          ret.lateralTuning.lqr.dcGain = 0.0028
+          ret.lateralTuning.lqr.dcGain = 0.00279
           ret.lateralTuning.lqr.a = [0., 1., -0.22619643, 1.21822268]
           ret.lateralTuning.lqr.b = [-1.92006585e-04, 3.95603032e-05]
           ret.lateralTuning.lqr.c = [1., 0.]
