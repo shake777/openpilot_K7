@@ -83,7 +83,7 @@ class CarInterface(CarInterfaceBase):
 
 
     ret.steerRatio = 16.5
-    ret.steerActuatorDelay = 0.2
+    ret.steerActuatorDelay = 0.1
     ret.steerRateCost = 0.4
 
     ret.steerLimitTimer = 2.5
@@ -121,7 +121,7 @@ class CarInterface(CarInterfaceBase):
 
       # thanks to 파파
       ret.steerRatio = 16.0
-      ret.steerActuatorDelay = 1.3
+      ret.steerActuatorDelay = 0.075
       ret.steerRateCost = 0.4
 
       if ret.lateralTuning.which() == 'torque':
