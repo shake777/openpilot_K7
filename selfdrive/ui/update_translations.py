@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 import argparse
-import os
 import json
+import os
 
-from common.basedir import BASEDIR
+BASEDIR = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), "../../"))
 
 UI_DIR = os.path.join(BASEDIR, "selfdrive", "ui")
 TRANSLATIONS_DIR = os.path.join(UI_DIR, "translations")
 LANGUAGES_FILE = os.path.join(TRANSLATIONS_DIR, "languages.json")
 
 
-def update_translations(release=False, suffix=""):
+def update_translations(release=False, translations_dir=TRANSLATIONS_DIR):
   with open(LANGUAGES_FILE, "r") as f:
     translation_files = json.load(f)
 
@@ -19,7 +19,7 @@ def update_translations(release=False, suffix=""):
       print(f"{name} has no translation file, skipping...")
       continue
 
-    tr_file = os.path.join(TRANSLATIONS_DIR, f"{file}{suffix}.ts")
+    tr_file = os.path.join(translations_dir, f"{file}.ts")
     ret = os.system(f"lupdate -recursive {UI_DIR} -ts {tr_file}")
     assert ret == 0
 

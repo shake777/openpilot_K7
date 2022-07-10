@@ -717,6 +717,8 @@ void NvgWindow::drawMaxSpeed(QPainter &p) {
   const int corner_radius = 32;
   int max_speed_height = 210;
 
+  QColor bgColor = QColor(0, 0, 0, 166);
+
   {
     // draw board
     QPainterPath path;
@@ -740,7 +742,7 @@ void NvgWindow::drawMaxSpeed(QPainter &p) {
     }
 
     p.setPen(Qt::NoPen);
-    p.fillPath(path.simplified(), QColor(0, 0, 0, 166));
+    p.fillPath(path.simplified(), bgColor);
   }
 
   QString str;
@@ -816,6 +818,37 @@ void NvgWindow::drawMaxSpeed(QPainter &p) {
     text_rect.moveCenter({b_rect.center().x(), 0});
     text_rect.moveTop(b_rect.top() + (b_rect.height() - text_rect.height()) / 2);
     p.drawText(text_rect, Qt::AlignCenter, str);
+
+    // left dist
+    QRect rcLeftDist;
+    QString strLeftDist;
+
+    if(left_dist < 1000)
+      strLeftDist.sprintf("%dm", left_dist);
+    else
+      strLeftDist.sprintf("%.1fkm", left_dist / 1000.f);
+
+    QFont font("Inter");
+    font.setPixelSize(55);
+    font.setStyleName("Bold");
+
+    QFontMetrics fm(font);
+    int width = fm.width(strLeftDist);
+
+    padding = 10;
+
+    int center_x = x_start + board_width / 2;
+    rcLeftDist.setRect(center_x - width / 2, y_start+board_height+15, width, font.pixelSize()+10);
+    rcLeftDist.adjust(-padding*2, -padding, padding*2, padding);
+
+    p.setPen(Qt::NoPen);
+    p.setBrush(bgColor);
+    p.drawRoundedRect(rcLeftDist, 20, 20);
+
+    configFont(p, "Inter", 55, "Bold");
+    p.setBrush(Qt::NoBrush);
+    p.setPen(QColor(255, 255, 255, 230));
+    p.drawText(rcLeftDist, Qt::AlignCenter|Qt::AlignVCenter, strLeftDist);
   }
   else if(roadLimitSpeed > 0 && roadLimitSpeed < 200) {
     QRectF board_rect = QRectF(x_start, y_start+max_speed_height, board_width, board_height-max_speed_height);
@@ -1025,17 +1058,17 @@ void NvgWindow::drawRestAreaItem(QPainter &p, int yPos, capnp::Text::Reader imag
   p.save();
 
   int mx = 20;
-  int my = 5;
+  int my = 10;
 
-  int box_width = Hardware::TICI() ? 580 : 510;
+  int box_width = Hardware::TICI() ? 590 : 520;
   int box_height = 200;
 
   int icon_size = 70;
 
-  //QRect rc(30, 30, 184, 202); // MAX box
-  QRect rc(184+30+30, 30 + yPos, box_width, box_height);
+  //QRect rc(30, 30, 210, 202); // MAX box
+  QRect rc(204+60, 30 + yPos, box_width, box_height);
   p.setBrush(QColor(0, 0, 0, 100));
-  p.drawRoundedRect(rc, 5, 5);
+  p.drawRoundedRect(rc, 20, 20);
 
   if(lastItem)
     p.setPen(QColor(255, 255, 255, 200));
@@ -1046,20 +1079,20 @@ void NvgWindow::drawRestAreaItem(QPainter &p, int yPos, capnp::Text::Reader imag
   int y = rc.top() + my;
 
   configFont(p, "Inter", 60, "Bold");
-  p.drawText(x, y+60+5, title.cStr());
+  p.drawText(x, y+60+10, title.cStr());
 
   QPixmap icon = get_icon_iol_com(image.cStr());
-  p.drawPixmap(x, y + box_height/2 + 5, icon_size, icon_size, icon);
+  p.drawPixmap(x, y + box_height/2, icon_size, icon_size, icon);
 
   configFont(p, "Inter", 50, "Bold");
-  p.drawText(x + icon_size + 15, y + box_height/2 + 50 + 5, oilPrice.cStr());
+  p.drawText(x + icon_size + 15, y + box_height/2 + 50, oilPrice.cStr());
 
   configFont(p, "Inter", 60, "Bold");
 
   QFontMetrics fm(p.font());
   QRect rect = fm.boundingRect(distance.cStr());
 
-  p.drawText(rc.left()+rc.width()-rect.width()-mx-5, y + box_height/2 + 60, distance.cStr());
+  p.drawText(rc.left()+rc.width()-rect.width()-mx-5, y + box_height/2 + 55, distance.cStr());
 
   p.restore();
 }
