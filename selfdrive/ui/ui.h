@@ -24,6 +24,9 @@ const int UI_FREQ = 20;   // Hz
 typedef cereal::CarControl::HUDControl::AudibleAlert AudibleAlert;
 
 const mat3 DEFAULT_CALIBRATION = {{ 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0 }};
+// TODO: choose based on frame input size
+const float y_offset = 150.0;
+const float ZOOM = 2912.8;
 
 struct Alert {
   QString text1;
@@ -78,24 +81,50 @@ typedef enum UIStatus {
 } UIStatus;
 
 const QColor bg_colors [] = {
-  [STATUS_DISENGAGED] =  QColor(0x17, 0x33, 0x49, 0xc8),
-  [STATUS_OVERRIDE] = QColor(0x91, 0x9b, 0x95, 0xf1),
-  [STATUS_ENGAGED] = QColor(0x17, 0x86, 0x44, 0xf1),
-  [STATUS_WARNING] = QColor(0xDA, 0x6F, 0x25, 0xf1),
+  [STATUS_DISENGAGED] =  QColor(0x17, 0x33, 0x49, 0x64),
+  [STATUS_OVERRIDE] = QColor(0x91, 0x9b, 0x95, 0xf1),  
+  [STATUS_ENGAGED] = QColor(0xFF, 0x00, 0xFF, 0x64),
+  [STATUS_WARNING] = QColor(0xA3, 0xD9, 0xFF, 0x64),
   [STATUS_ALERT] = QColor(0xC9, 0x22, 0x31, 0xf1),
 };
+
+typedef struct {
+  QPointF v[TRAJECTORY_SIZE * 2];
+  int cnt;
+} line_vertices_data;
 
 typedef struct UIScene {
   bool calibration_valid = false;
   mat3 view_from_calib = DEFAULT_CALIBRATION;
   cereal::PandaState::PandaType pandaType;
 
+  // ui add
+  bool steeringPressed, engaged, override;
+
+  // Brake on SPD
+  bool brakePress;
+  bool brakeLights;
+
+  // Turning Signal
+  bool leftBlinker, rightBlinker;
+  int blinkingrate;
+
+  // BSD
+  bool leftblindspot, rightblindspot;
+  int blindspot_blinkingrate = 120;
+  int car_valid_status_changed = 0;
+  
+  // Tenesi
+  float currentGear;
+  cereal::CarState::GearShifter getGearShifter;
+
   // modelV2
   float lane_line_probs[4];
   float road_edge_stds[2];
-  QPolygonF track_vertices;
-  QPolygonF lane_line_vertices[4];
-  QPolygonF road_edge_vertices[2];
+  line_vertices_data track_vertices;
+  line_vertices_data lane_line_vertices[4];
+  line_vertices_data road_edge_vertices[2];
+  line_vertices_data lane_barrier_vertices[2];
 
   // lead
   QPointF lead_vertices[2];
@@ -135,6 +164,10 @@ public:
   bool recording = false;
   bool show_debug = false;
   std::string lat_control;
+
+  bool show_gear = false; //boxkon
+  bool show_turnsignal = false; //boxkon
+  bool show_engrpm = false;  //tenesi
 
 signals:
   void uiUpdate(const UIState &s);

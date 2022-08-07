@@ -269,6 +269,12 @@ void NvgWindow::initializeGL() {
 }
 
 void NvgWindow::updateState(const UIState &s) {
+  const SubMaster &sm = *(s.sm);
+  const bool cs_alive = sm.alive("controlsState");
+
+  // TODO: Add minimum speed?
+  setProperty("left_blindspot", cs_alive && sm["carState"].getCarState().getLeftBlindspot());
+  setProperty("right_blindspot", cs_alive && sm["carState"].getCarState().getRightBlindspot());
 
   if (s.scene.calibration_valid) {
     CameraViewWidget::updateCalibration(s.scene.view_from_calib);
@@ -285,7 +291,11 @@ void NvgWindow::updateFrameMat() {
 
   s->fb_w = w;
   s->fb_h = h;
-
+  auto intrinsic_matrix = s->wide_camera ? ecam_intrinsic_matrix : fcam_intrinsic_matrix;
+  float zoom = ZOOM / intrinsic_matrix.v[0];
+  if (s->wide_camera) {
+    zoom *= 0.5;
+  }
   // Apply transformation such that video pixel coordinates match video
   // 1) Put (0, 0) in the middle of the video
   // 2) Apply same scaling as video
@@ -303,18 +313,23 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
   // lanelines
   for (int i = 0; i < std::size(scene.lane_line_vertices); ++i) {
     painter.setBrush(QColor::fromRgbF(1.0, 1.0, 1.0, std::clamp<float>(scene.lane_line_probs[i], 0.0, 0.7)));
-    painter.drawPolygon(scene.lane_line_vertices[i]);
+    painter.drawPolygon(scene.lane_line_vertices[i].v, scene.lane_line_vertices[i].cnt);
   }
+
+  // TODO: Fix empty spaces when curiving back on itself
+  painter.setBrush(QColor::fromRgbF(1.0, 0.0, 0.0, 0.2));
+  if (left_blindspot) painter.drawPolygon(scene.lane_barrier_vertices[0].v, scene.lane_barrier_vertices[0].cnt);
+  if (right_blindspot) painter.drawPolygon(scene.lane_barrier_vertices[1].v, scene.lane_barrier_vertices[1].cnt);
 
   // road edges
   for (int i = 0; i < std::size(scene.road_edge_vertices); ++i) {
     painter.setBrush(QColor::fromRgbF(1.0, 0, 0, std::clamp<float>(1.0 - scene.road_edge_stds[i], 0.0, 1.0)));
-    painter.drawPolygon(scene.road_edge_vertices[i]);
+    painter.drawPolygon(scene.road_edge_vertices[i].v, scene.road_edge_vertices[i].cnt);
   }
 
   // paint path
   QLinearGradient bg(0, height(), 0, height() / 4);
-  if (scene.end_to_end) {
+  if (scene.engaged) {
     const auto &orientation = (*s->sm)["modelV2"].getModelV2().getOrientation();
     float orientation_future = 0;
     if (orientation.getZ().size() > 16) {
@@ -325,15 +340,24 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
     // FIXME: painter.drawPolygon can be slow if hue is not rounded
     curve_hue = int(curve_hue * 100 + 0.5) / 100;
 
-    bg.setColorAt(0.0, QColor::fromHslF(148 / 360., 0.94, 0.51, 0.4));
-    bg.setColorAt(0.75 / 1.5, QColor::fromHslF(curve_hue / 360., 1.0, 0.68, 0.35));
-    bg.setColorAt(1.0, QColor::fromHslF(curve_hue / 360., 1.0, 0.68, 0.0));
+    if (scene.steeringPressed) {
+      // The user is applying torque to the steering wheel
+      bg.setColorAt(0, steeringpressedColor(200));
+      bg.setColorAt(1, QColor(0, 95, 128, 50));
+    } else if (scene.override) {
+      bg.setColorAt(0, overrideColor(200));
+      bg.setColorAt(1, QColor(72, 77, 74, 50));
+    } else {
+      bg.setColorAt(0.0, QColor::fromHslF(148 / 360., 0.94, 0.51, 0.4));
+      bg.setColorAt(0.75 / 1.5, QColor::fromHslF(curve_hue / 360., 1.0, 0.68, 0.35));
+      bg.setColorAt(1.0, QColor::fromHslF(curve_hue / 360., 1.0, 0.68, 0.0));
+    }
   } else {
     bg.setColorAt(0, whiteColor(200));
     bg.setColorAt(1, whiteColor(0));
   }
   painter.setBrush(bg);
-  painter.drawPolygon(scene.track_vertices);
+  painter.drawPolygon(scene.track_vertices.v, scene.track_vertices.cnt);
 
   painter.restore();
 }
@@ -482,6 +506,12 @@ void NvgWindow::drawHud(QPainter &p, const cereal::ModelDataV2::Reader &model) {
   //drawTurnSignals(p);
   drawGpsStatus(p);
 
+  if(s->show_turnsignal) // boxkon
+    drawTurnSignals(p);
+  if(s->show_gear)      // boxkon
+    drawCurrentGear(p);
+  if(s->show_engrpm)    //tenesi
+    drawEngRpm(p);
   if(s->show_debug && width() > 1200)
     drawDebugText(p);
 
@@ -491,15 +521,16 @@ void NvgWindow::drawHud(QPainter &p, const cereal::ModelDataV2::Reader &model) {
 
   int mdps_bus = car_params.getMdpsBus();
   int scc_bus = car_params.getSccBus();
+  bool has_hda = car_params.getHasHda();  
 
   QString infoText;
-  infoText.sprintf("%s AO(%.2f/%.2f) SR(%.2f) SAD(%.2f) BUS(MDPS %d, SCC %d) SCC(%.2f/%.2f/%.2f)",
+  infoText.sprintf("%s AO(%.2f/%.2f) SR(%.2f) SAD(%.2f) BUS(MDPS %d, SCC %d, HDA %d) SCC(%.2f/%.2f/%.2f)",
                       s->lat_control.c_str(),
                       live_params.getAngleOffsetDeg(),
                       live_params.getAngleOffsetAverageDeg(),
                       controls_state.getSteerRatio(),
                       controls_state.getSteerActuatorDelay(),
-                      mdps_bus, scc_bus,
+                      mdps_bus, scc_bus, has_hda,
                       controls_state.getSccGasFactor(),
                       controls_state.getSccBrakeFactor(),
                       controls_state.getSccCurvatureFactor()
@@ -648,6 +679,12 @@ void NvgWindow::drawSpeed(QPainter &p) {
     a = std::max(a, 60);
     color = QColor(255, a, a, 230);
   }
+
+  bool brakeLights = car_state.getBrakeLights();
+  bool brakePress = car_state.getBrakePressed();
+
+  if( brakePress ) color = QColor(255, 0, 0, 200);
+  else if( brakeLights ) color = QColor(255, 0, 255, 100);
 
   QString speed;
   speed.sprintf("%.0f", cur_speed);
@@ -1319,4 +1356,84 @@ void NvgWindow::drawDebugText(QPainter &p) {
   p.drawText(text_x, y, str);
 
   p.restore();
+}
+
+void NvgWindow::drawCurrentGear(QPainter &p) {
+  const SubMaster &sm = *(uiState()->sm);
+  auto car_state = sm["carState"].getCarState();
+
+  float currentGear = car_state.getCurrentGear();
+  int gearShifter = (int)car_state.getGearShifter();
+  float textSize = 25 * 7.f;
+
+  QRect rc(245, 35, 184, 202);
+  p.setPen(QPen(QColor(0xff, 0xff, 0xff, 100), 10));
+  p.setBrush(QColor(0, 0, 0, 100));
+  p.drawRoundedRect(rc, 20, 20);
+  p.setPen(Qt::NoPen);
+
+  QString str;
+  configFont(p, "Inter", textSize, "Bold");
+
+  QColor textColor0 = QColor(120, 255, 120, 200);
+  QColor textColor1 = QColor(255, 0, 0, 200);
+  QColor textColor2 = QColor(255, 255, 255, 200);
+  QColor textColor3 = QColor(255, 255, 0, 200);
+
+  if ((currentGear < 9) && (currentGear !=0)) {
+    str.sprintf("%.0f", currentGear);
+    drawTextWithColor(p, rc.center().x(), rc.center().y() + 70, str, textColor0);
+  } else if (currentGear == 14 ) {
+    configFont(p, "Inter", textSize, "Bold");
+    drawTextWithColor(p, rc.center().x(), rc.center().y() + 70, "R", textColor1);
+  } else if (gearShifter == 1 ) {
+    configFont(p, "Inter", textSize, "Bold");
+    drawTextWithColor(p, rc.center().x(), rc.center().y() + 70, "P", textColor2);
+  } else if (gearShifter == 3 ) {
+    configFont(p, "Inter", textSize, "Bold");
+    drawTextWithColor(p, rc.center().x(), rc.center().y() + 70, "N", textColor3);
+  } else {
+    configFont(p, "Inter", textSize, "Bold");
+    drawTextWithColor(p, rc.center().x(), rc.center().y() + 70, "", textColor3);
+  }
+}
+
+// tenesi
+void NvgWindow::drawEngRpm(QPainter &p) {
+  const SubMaster &sm = *(uiState()->sm);
+  auto car_state = sm["carState"].getCarState();
+
+  float eng_rpm = car_state.getEngRpm(); // car.capnp에 정의된 engrpm 변수명의 데이터를 읽는다..
+  float textSize_1 = 48;
+  float textSize_2 = 65;
+
+  QString rpm; // - rpm 데이터를 문자화한다..
+
+  rpm.sprintf("%.0f", eng_rpm); // 문자변수에 포맷을 지정해서 저장.
+  configFont(p, "Inter", textSize_2, "Regular");
+
+  QRect rc(245, 237, 184, 202);
+  p.setPen(QPen(QColor(0xff, 0xff, 0xff, 100), 10));
+  p.setBrush(QColor(0, 0, 0, 100));
+  p.drawRoundedRect(rc, 20, 20);
+  p.setPen(Qt::NoPen);
+
+  QColor textColor0 = QColor(255, 255, 255, 200); // white
+  QColor textColor1 = QColor(120, 255, 120, 200); // green
+  QColor textColor2 = QColor(255, 255, 0, 200); // yellow
+  QColor textColor3 = QColor(255, 0, 0, 200);  // red
+
+  if (eng_rpm < 1099) {
+   drawTextWithColor(p, rc.center().x(), rc.center().y() + 60, rpm, textColor0);
+  } else if (eng_rpm < 2300) {
+   drawTextWithColor(p, rc.center().x(), rc.center().y() + 60, rpm, textColor1);
+  } else if (eng_rpm < 2999) {
+   drawTextWithColor(p, rc.center().x(), rc.center().y() + 60, rpm, textColor2);
+  } else if (eng_rpm > 3000) {
+   drawTextWithColor(p, rc.center().x(), rc.center().y() + 60, rpm, textColor2);
+  }
+
+  configFont(p, "Inter", textSize_1, "Bold");
+  drawTextWithColor(p, rc.center().x(), 310, "RPM", textColor0);
+
 }

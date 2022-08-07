@@ -10,6 +10,7 @@ from opendbc.can.parser import CANParser
 from opendbc.can.can_define import CANDefine
 from common.conversions import Conversions as CV
 from common.params import Params
+import copy
 
 PREV_BUTTON_SAMPLES = 8
 
@@ -41,7 +42,6 @@ class CarState(CarStateBase):
     self.scc_bus = CP.sccBus
     self.has_scc13 = CP.hasScc13 or CP.carFingerprint in FEATURES["has_scc13"]
     self.has_scc14 = CP.hasScc14 or CP.carFingerprint in FEATURES["has_scc14"]
-    self.has_lfa_hda = CP.hasLfaHda
     self.leftBlinker = False
     self.rightBlinker = False
     self.mdps_error_cnt = 0
@@ -51,6 +51,10 @@ class CarState(CarStateBase):
     self.buttons_counter = 0
 
     self.params = CarControllerParams(CP)
+
+    # for activate HDA
+    self.hda_mfc = None
+    self.has_hda = CP.hasHda
 
     # scc smoother
     self.acc_mode = False
@@ -180,6 +184,10 @@ class CarState(CarStateBase):
       ret.gas = cp.vl["EMS12"]["PV_AV_CAN"] / 100.
       ret.gasPressed = bool(cp.vl["EMS16"]["CF_Ems_AclAct"])
 
+    if not self.car_fingerprint in FEATURES["use_elect_gears"]: # for display current state of gear by Tenesi
+      ret.currentGear = cp.vl["LVR11"]["CF_Lvr_CGear"]
+      ret.engRpm = cp.vl["EMS_366"]["Eng_RPM"]  # display rpm
+
     # TODO: refactor gear parsing in function
     # Gear Selection via Cluster - For those Kia/Hyundai which are not fully discovered, we can use the Cluster Indicator for Gear Selection,
     # as this seems to be standard over all cars, but is not the preferred method.
@@ -215,10 +223,13 @@ class CarState(CarStateBase):
     self.scc11 = cp_scc.vl["SCC11"]
     self.scc12 = cp_scc.vl["SCC12"]
     self.mdps12 = cp_mdps.vl["MDPS12"]
-    self.lfahda_mfc = cp_cam.vl["LFAHDA_MFC"]
     self.steer_state = cp_mdps.vl["MDPS12"]["CF_Mdps_ToiActive"] #0 NOT ACTIVE, 1 ACTIVE
     self.cruise_unavail_cnt += 1 if cp.vl["TCS13"]["CF_VSM_Avail"] != 1 and cp.vl["TCS13"]["ACCEnable"] != 0 else -self.cruise_unavail_cnt
     self.cruise_unavail = self.cruise_unavail_cnt > 100
+
+    # for activate HDA
+    if self.has_hda:
+      self.hda_mfc = copy.copy(cp_cam.vl["LFAHDA_MFC"])
 
     self.lead_distance = cp_scc.vl["SCC11"]["ACC_ObjDist"] if not self.no_radar else 0
     if self.has_scc13:
@@ -298,7 +309,7 @@ class CarState(CarStateBase):
       return CarState.get_can_parser_hda2(CP)
 
     signals = [
-      # sig_name, sig_address
+      # signal_name, signal_address
       ("WHL_SPD_FL", "WHL_SPD11"),
       ("WHL_SPD_FR", "WHL_SPD11"),
       ("WHL_SPD_RL", "WHL_SPD11"),
@@ -310,9 +321,9 @@ class CarState(CarStateBase):
 
       ("CF_Gway_DrvSeatBeltSw", "CGW1"),
       ("CF_Gway_DrvDrSw", "CGW1"),       # Driver Door
-      ("CF_Gway_AstDrSw", "CGW1"),       # Passenger door
-      ("CF_Gway_RLDrSw", "CGW2"),        # Rear reft door
-      ("CF_Gway_RRDrSw", "CGW2"),        # Rear right door
+      ("CF_Gway_AstDrSw", "CGW1"),       # Passenger Door
+      ("CF_Gway_RLDrSw", "CGW2"),        # Rear left Door
+      ("CF_Gway_RRDrSw", "CGW2"),        # Rear right Door
       ("CF_Gway_TurnSigLh", "CGW1"),
       ("CF_Gway_TurnSigRh", "CGW1"),
       ("CF_Gway_ParkBrakeSw", "CGW1"),   # Parking Brake
@@ -337,13 +348,24 @@ class CarState(CarStateBase):
       ("aBasis", "TCS13"),
       ("DriverBraking", "TCS13"),
       ("PBRAKE_ACT", "TCS13"),
-      ("DriverOverride", "TCS13"),
+      ("DriverOverride", "TCS13"), # scc smoother
       ("CF_VSM_Avail", "TCS13"),
 
       ("ESC_Off_Step", "TCS15"),
       ("AVH_LAMP", "TCS15"),
 
-      #("CF_Lvr_GearInf", "LVR11"),        # Transmission Gear (0 = N or P, 1-8 = Fwd, 14 = Rev)
+      ("Lvr12_00", "LVR12"),      # for display current state of gear by Tenesi
+      ("Lvr12_01", "LVR12"),
+      ("Lvr12_02", "LVR12"),
+      ("Lvr12_03", "LVR12"),
+      ("Lvr12_04", "LVR12"),
+      ("Lvr12_05", "LVR12"),
+      ("Lvr12_06", "LVR12"),
+      ("Lvr12_07", "LVR12"),
+
+      ("CF_Lvr_CGear", "LVR11"),  # for display current state of gear by Tenesi
+      ("CF_Lvr_GearInf", "LVR11"),  # Transmission Gear (0 = N or P, 1-8 = Fwd, 14 = Rev)
+      ("Eng_RPM", "EMS_366"),  # display rpm
 
       ("MainMode_ACC", "SCC11"),
       ("SCCInfoDisplay", "SCC11"),
@@ -614,7 +636,7 @@ class CarState(CarStateBase):
       return CANParser(DBC[CP.carFingerprint]["pt"], signals, checks, 6)
 
     signals = [
-      # sig_name, sig_address, default
+      # signal_name, signal_address
       ("CF_Lkas_LdwsActivemode", "LKAS11"),
       ("CF_Lkas_LdwsSysState", "LKAS11"),
       ("CF_Lkas_SysWarning", "LKAS11"),
@@ -692,13 +714,16 @@ class CarState(CarStateBase):
         ("SCC12", 50),
       ]
 
-      if CP.hasLfaHda:
+      # for activate HDA
+      if CP.carFingerprint in FEATURES["has_hda"]:
         signals += [
           ("HDA_USM", "LFAHDA_MFC"),
           ("HDA_Active", "LFAHDA_MFC"),
           ("HDA_Icon_State", "LFAHDA_MFC"),
           ("HDA_LdwSysState", "LFAHDA_MFC"),
           ("HDA_Icon_Wheel", "LFAHDA_MFC"),
+          ("HDA_Chime", "LFAHDA_MFC"),
+          ("HDA_VSetReq", "LFAHDA_MFC"),
         ]
         checks += [("LFAHDA_MFC", 20)]
 

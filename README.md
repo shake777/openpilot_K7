@@ -142,6 +142,7 @@ Directory Structure
         ├── monitoring      # Daemon to determine driver attention
         ├── navd            # Turn-by-turn navigation
         ├── sensord         # IMU interface code
+        ├── navd            # Turn-by-turn navigation
         ├── test            # Unit tests, system tests, and a car simulator
         └── ui              # The UI
 
