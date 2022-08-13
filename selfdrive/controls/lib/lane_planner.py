@@ -111,12 +111,9 @@ class LanePlanner:
 
     self.d_prob = l_prob + r_prob - l_prob * r_prob
 
-    # neokii/stonerains
-    if ENABLE_INC_LANE_PROB and self.d_prob > 0.7:
-      self.d_prob = min(self.d_prob * 1.35, 1.0)
-    elif self.d_prob > 0.3:
-      self.d_prob = main(self.d_prob * 1.6255, 0.93)
-
+    # neokii
+    if ENABLE_INC_LANE_PROB and self.d_prob > 0.65:
+      self.d_prob = min(self.d_prob * 1.3, 1.0)
 
     lane_path_y = (l_prob * path_from_left_lane + r_prob * path_from_right_lane) / (l_prob + r_prob + 0.0001)
     safe_idxs = np.isfinite(self.ll_t)
