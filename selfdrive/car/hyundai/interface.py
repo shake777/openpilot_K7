@@ -64,7 +64,7 @@ class CarInterface(CarInterfaceBase):
       ret.safetyConfigs = [get_safety_config(car.CarParams.SafetyModel.hyundaiCommunity, 0)]
 
     tire_stiffness_factor = 1.
-    ret.maxSteeringAngleDeg = 1080.
+    ret.maxSteeringAngleDeg = 1000.
 
     ret.steerFaultMaxAngle = 85
     ret.steerFaultMaxFrames = 90
