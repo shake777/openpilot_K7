@@ -93,7 +93,7 @@ def create_lfahda_mfc(packer, enabled, active):
   return packer.make_can_msg("LFAHDA_MFC", 0, values)
 
 def create_hda_mfc(packer, active, CS, left_lane, right_lane):
-  values = copy.copy(CS.lfahda_mfc)
+  values = CS.hda_mfc
 
   ldwSysState = 0
   if left_lane:
@@ -104,9 +104,22 @@ def create_hda_mfc(packer, active, CS, left_lane, right_lane):
   values["HDA_LdwSysState"] = ldwSysState
   values["HDA_USM"] = 2
   values["HDA_VSetReq"] = 100
-  values["HDA_Icon_Wheel"] = 1 if active > 1 and CS.out.cruiseState.enabledAcc else 0
-  values["HDA_Icon_State"] = 2 if active > 1 else 0
-  values["HDA_Chime"] = 1 if active > 1 else 0
+
+  if active > 1 and CS.out.cruiseState.enabledAcc:
+    values["HDA_Active"] = 0
+    values["HDA_Icon_Wheel"] = 1
+    values["HDA_Icon_State"] = 2
+    values["HDA_Chime"] = 1
+  elif active > 1 and not CS.out.cruiseState.enabledAcc:
+    values["HDA_Active"] = 0
+    values["HDA_Icon_Wheel"] = 0
+    values["HDA_Icon_State"] = 1
+    values["HDA_Chime"] = 0
+  else:
+    values["HDA_Active"] = 0
+    values["HDA_Icon_Wheel"] = 0
+    values["HDA_Icon_State"] = 0
+    values["HDA_Chime"] = 0
 
   return packer.make_can_msg("LFAHDA_MFC", 0, values)
 
@@ -123,19 +136,22 @@ def create_mdps12(packer, frame, mdps12):
 
   return packer.make_can_msg("MDPS12", 2, values)
 
-def create_scc11(packer, frame, enabled, set_speed, lead_visible, scc_live, scc11, active_cam, stock_cam):
+def create_scc11(packer, frame, enabled, set_speed, lead_visible, scc_live, scc11, active_cam, stock_cam, active):
   values = copy.copy(scc11)
   values["AliveCounterACC"] = frame // 2 % 0x10
 
-  if not stock_cam:
+  if not stock_cam and active < 2:
     values["Navi_SCC_Camera_Act"] = 2 if active_cam else 0
     values["Navi_SCC_Camera_Status"] = 2 if active_cam else 0
 
   if not scc_live:
     values["MainMode_ACC"] = 1
-    values["VSetDis"] = set_speed
-    values["ObjValid"] = 1 if enabled else 0
-#  values["ACC_ObjStatus"] = lead_visible
+    values["TauGapSet"] = 4
+    values["VSetDis"] = set_speed if enabled else 0
+    values["ObjValid"] = 0 # TODO: these two bits may allow for better longitudinal control
+    values["ACC_ObjStatus"] = 0
+    values["ACC_ObjRelSpd"] = 0
+    values["ACC_ObjDist"] = 0
 
   return packer.make_can_msg("SCC11", 0, values)
 

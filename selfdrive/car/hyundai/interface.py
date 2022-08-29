@@ -4,7 +4,7 @@ from typing import List
 from cereal import car
 from common.numpy_fast import interp
 from common.conversions import Conversions as CV
-from selfdrive.car.hyundai.values import CAR, Buttons, CarControllerParams, CANFD_CAR
+from selfdrive.car.hyundai.values import CAR, Buttons, CarControllerParams, HDA2_CAR, FEATURES
 from selfdrive.car import STD_CARGO_KG, scale_rot_inertia, scale_tire_stiffness, gen_empty_fingerprint, get_safety_config
 from selfdrive.car.interfaces import CarInterfaceBase
 from common.params import Params
@@ -33,8 +33,8 @@ class CarInterface(CarInterfaceBase):
 
     v_current_kph = current_speed * CV.MS_TO_KPH
 
-    gas_max_bp = [10., 20., 50., 70., 130., 150.]
-    gas_max_v = [1.4, 1.2, 0.63, 0.44, 0.15, 0.1]
+    gas_max_bp = [0., 10., 20., 30., 50., 70., 100, 130.]
+    gas_max_v = [1.1, 1.0, .72, .69, .62, .38, .2, .1]
 
     return CarControllerParams.ACCEL_MIN, interp(v_current_kph, gas_max_bp, gas_max_v)
 
@@ -45,15 +45,10 @@ class CarInterface(CarInterfaceBase):
     ret.openpilotLongitudinalControl = Params().get_bool('LongControlEnabled')
 
     ret.carName = "hyundai"
-
-    if candidate in CANFD_CAR:
-      ret.safetyConfigs = [get_safety_config(car.CarParams.SafetyModel.noOutput),
-                           get_safety_config(car.CarParams.SafetyModel.hyundaiCanfd)]
-    else:
-      ret.safetyConfigs = [get_safety_config(car.CarParams.SafetyModel.hyundaiCommunity, 0)]
+    ret.safetyConfigs = [get_safety_config(car.CarParams.SafetyModel.hyundaiCommunity, 0)]
 
     tire_stiffness_factor = 1.
-    ret.maxSteeringAngleDeg = 1000.
+    ret.maxSteeringAngleDeg = 1080.
 
     ret.steerFaultMaxAngle = 85
     ret.steerFaultMaxFrames = 90
@@ -76,8 +71,9 @@ class CarInterface(CarInterfaceBase):
       torque_tune(ret.lateralTuning, 2.5, 0.01)
 
     ret.steerRatio = 16.5
-    ret.steerActuatorDelay = 0.2
-    ret.steerLimitTimer = 2.5
+    ret.steerActuatorDelay = 0.1
+
+    ret.steerLimitTimer = 3.0
 
     # longitudinal
     ret.longitudinalTuning.kpBP = [0., 5.*CV.KPH_TO_MS, 10.*CV.KPH_TO_MS, 30.*CV.KPH_TO_MS, 130.*CV.KPH_TO_MS]
@@ -85,12 +81,12 @@ class CarInterface(CarInterfaceBase):
     ret.longitudinalTuning.kiBP = [0., 130. * CV.KPH_TO_MS]
     ret.longitudinalTuning.kiV = [0.1, 0.05]
     ret.longitudinalActuatorDelayLowerBound = 0.3
-    ret.longitudinalActuatorDelayUpperBound = 0.3
+    ret.longitudinalActuatorDelayUpperBound = 0.5
 
-    ret.stopAccel = -2.5
-    ret.stoppingDecelRate = 0.4  # brake_travel/s while trying to stop
+    ret.stopAccel = -2.0
+    ret.stoppingDecelRate = 0.15  # brake_travel/s while trying to stop
     ret.vEgoStopping = 0.5
-    ret.vEgoStarting = 0.5
+    ret.vEgoStarting = 0.3
 
     # genesis
     if candidate == CAR.GENESIS:
@@ -107,16 +103,17 @@ class CarInterface(CarInterfaceBase):
       ret.wheelbase = 3.01
       ret.centerToFront = ret.wheelbase * 0.4
     elif candidate == CAR.GENESIS_EQ900:
-      ret.mass = 2200
-      ret.wheelbase = 3.15
-      ret.centerToFront = ret.wheelbase * 0.4
+      ret.mass = 2200. + STD_CARGO_KG
+      ret.wheelbase = 3.2
+      ret.centerToFront = ret.wheelbase * 0.45
+      tire_stiffness_factor = 0.8
 
       # thanks to 파파
-      ret.steerRatio = 16.0
-      ret.steerActuatorDelay = 0.075
+      ret.steerRatio = 16.5
+      ret.steerActuatorDelay = 0.2
 
       if ret.lateralTuning.which() == 'torque':
-        torque_tune(ret.lateralTuning, 2.5, 0.01)
+        torque_tune(ret.lateralTuning, 3.5, 0.01)
 
     elif candidate == CAR.GENESIS_EQ900_L:
       ret.mass = 2290
@@ -184,16 +181,10 @@ class CarInterface(CarInterfaceBase):
       tire_stiffness_factor = 0.7
       ret.centerToFront = ret.wheelbase * 0.4
     elif candidate in [CAR.KONA_HEV, CAR.KONA_EV]:
-      ret.mass = 1427. + STD_CARGO_KG
+      ret.mass = 1395. + STD_CARGO_KG
       ret.wheelbase = 2.6
       tire_stiffness_factor = 0.7
-      ret.steerRatio = 13.27
       ret.centerToFront = ret.wheelbase * 0.4
-
-      if ret.lateralTuning.which() == 'torque':
-        # selfdrive/car/torque_data/params.yaml, https://codebeautify.org/jsonviewer/y220b1623
-        torque_tune(ret.lateralTuning, 4.493208192966529, 0.0863709736632968)
-
     elif candidate in [CAR.IONIQ, CAR.IONIQ_EV_LTD, CAR.IONIQ_EV_2020, CAR.IONIQ_PHEV]:
       ret.mass = 1490. + STD_CARGO_KG
       ret.wheelbase = 2.7
@@ -276,7 +267,7 @@ class CarInterface(CarInterfaceBase):
       tire_stiffness_factor = 0.8
     elif candidate in [CAR.K7, CAR.K7_HEV]:
       tire_stiffness_factor = 0.7
-      ret.mass = 1650. + STD_CARGO_KG
+      ret.mass = 1595. + STD_CARGO_KG
       ret.wheelbase = 2.855
       ret.centerToFront = ret.wheelbase * 0.4
       ret.steerRatio = 17.25
@@ -295,24 +286,19 @@ class CarInterface(CarInterfaceBase):
       ret.mass = 2055 + STD_CARGO_KG
       ret.wheelbase = 2.9
       ret.steerRatio = 16.
+      ret.safetyConfigs = [get_safety_config(car.CarParams.SafetyModel.noOutput),
+                           get_safety_config(car.CarParams.SafetyModel.hyundaiHDA2)]
       tire_stiffness_factor = 0.65
 
       if ret.lateralTuning.which() == 'torque':
         torque_tune(ret.lateralTuning, 3.5, 0.01)
 
-    elif candidate == CAR.IONIQ_5:
-      ret.mass = 2012 + STD_CARGO_KG
-      ret.wheelbase = 3.0
-      ret.steerRatio = 16.
-      tire_stiffness_factor = 0.65
-
-      if ret.lateralTuning.which() == 'torque':
-        torque_tune(ret.lateralTuning, 3.5, 0.01)
 
     ret.radarTimeStep = 0.05
 
     if ret.centerToFront == 0:
       ret.centerToFront = ret.wheelbase * 0.4
+
 
     # TODO: get actual value, for now starting with reasonable value for
     # civic and scaling by mass and wheelbase
@@ -329,7 +315,7 @@ class CarInterface(CarInterfaceBase):
 
     ret.stoppingControl = True
 
-    if candidate in CANFD_CAR:
+    if candidate in HDA2_CAR:
       ret.enableBsm = 0x58b in fingerprint[0]
       ret.radarOffCan = False
     else:
@@ -347,7 +333,7 @@ class CarInterface(CarInterfaceBase):
         ret.hasScc14 = 905 in fingerprint[ret.sccBus]
 
       ret.hasEms = 608 in fingerprint[0] and 809 in fingerprint[0]
-      ret.hasLfaHda = 1157 in fingerprint[0]
+      ret.hasHda = 1157 in fingerprint[0] or candidate in FEATURES['has_hda']
       ret.radarOffCan = ret.sccBus == -1
 
     ret.pcmCruise = not ret.radarOffCan

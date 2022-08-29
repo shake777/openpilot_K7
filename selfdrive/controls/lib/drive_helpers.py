@@ -10,8 +10,8 @@ from selfdrive.ntune import ntune_common_get
 # WARNING: this value was determined based on the model's training distribution,
 #          model predictions above this speed can be unpredictable
 # kph
-V_CRUISE_MAX = 145
-V_CRUISE_MIN = 30
+V_CRUISE_MAX = 180
+V_CRUISE_MIN = 5  # kph
 V_CRUISE_DELTA_MI = 5 * CV.MPH_TO_KPH
 V_CRUISE_DELTA_KM = 10
 V_CRUISE_ENABLE_MIN = 30
@@ -39,7 +39,11 @@ CRUISE_INTERVAL_SIGN = {
 class MPC_COST_LAT:
   PATH = 1.0
   HEADING = 1.0
-  STEER_RATE = 0.4
+<<<<<<< HEAD
+  STEER_RATE = 0.45
+=======
+  STEER_RATE = 0.475
+>>>>>>> parent of e9057582 (Revert "tune steer_rate")
 
 
 def apply_deadzone(error, deadzone):

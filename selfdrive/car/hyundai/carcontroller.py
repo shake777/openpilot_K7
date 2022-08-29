@@ -72,9 +72,9 @@ class CarController:
 
     self.scc_smoother = SccSmoother()
     self.last_blinker_frame = 0
-    self.prev_active_cam = False
-    self.active_cam_timer = 0
-    self.last_active_cam_frame = 0
+    # self.prev_active_cam = False
+    # self.active_cam_timer = 0
+    # self.last_active_cam_frame = 0
 
     self.angle_limit_counter = 0
     self.cut_steer_frames = 0
@@ -114,16 +114,19 @@ class CarController:
     sys_warning, sys_state, left_lane_warning, right_lane_warning = process_hud_alert(CC.enabled, self.CP.carFingerprint, hud_control)
 
     if self.haptic_feedback_speed_camera:
-      if self.prev_active_cam != self.scc_smoother.active_cam:
-        self.prev_active_cam = self.scc_smoother.active_cam
-        if self.scc_smoother.active_cam:
-          if (self.frame - self.last_active_cam_frame) * DT_CTRL > 10.0:
-            self.active_cam_timer = int(1.5 / DT_CTRL)
-            self.last_active_cam_frame = self.frame
-
-      if self.active_cam_timer > 0:
-        self.active_cam_timer -= 1
+      if self.scc_smoother.active_cam:
         left_lane_warning = right_lane_warning = 1
+
+      # if self.prev_active_cam != self.scc_smoother.active_cam:
+      #   self.prev_active_cam = self.scc_smoother.active_cam
+      #   if self.scc_smoother.active_cam:
+      #     if (frame - self.last_active_cam_frame) * DT_CTRL > 10.0:
+      #       self.active_cam_timer = int(1.5 / DT_CTRL)
+      #       self.last_active_cam_frame = frame
+
+      # if self.active_cam_timer > 0:
+      #   self.active_cam_timer -= 1
+      #   left_lane_warning = right_lane_warning = 1
 
     clu11_speed = CS.clu11["CF_Clu_Vanz"]
     enabled_speed = 38 if CS.is_set_speed_in_mph else 60
@@ -184,7 +187,7 @@ class CarController:
       # activated_hda: 0 - off, 1 - main road, 2 - highway
       if self.CP.carFingerprint in FEATURES["send_lfa_mfa"]:
         can_sends.append(hyundaican.create_lfahda_mfc(self.packer, CC.enabled, activated_hda))
-      elif CS.has_lfa_hda:
+      elif CS.has_hda:
         can_sends.append(hyundaican.create_hda_mfc(self.packer, activated_hda, CS, hud_control.leftLaneVisible, hud_control.rightLaneVisible))
 
     new_actuators = actuators.copy()
@@ -270,8 +273,9 @@ class CarController:
                                       CS.out.gasPressed, CS.out.brakePressed, CS.out.cruiseState.standstill,
                                       self.CP.carFingerprint))
 
+        activated_hda = road_speed_limiter_get_active()
         can_sends.append(hyundaican.create_scc11(self.packer, self.frame, CC.enabled, set_speed, hud_control.leadVisible, self.scc_live, CS.scc11,
-                       self.scc_smoother.active_cam, stock_cam))
+                        self.scc_smoother.active_cam, stock_cam, activated_hda))
 
         if self.frame % 20 == 0 and CS.has_scc13:
           can_sends.append(hyundaican.create_scc13(self.packer, CS.scc13))

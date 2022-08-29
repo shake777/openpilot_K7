@@ -186,13 +186,13 @@ class CarInterfaceBase(ABC):
   def create_common_events(self, cs_out, extra_gears=None, pcm_enable=True, allow_enable=True):
     events = Events()
 
-    if cs_out.doorOpen:
-      events.add(EventName.doorOpen)
-    if cs_out.seatbeltUnlatched:
-      events.add(EventName.seatbeltNotLatched)
-    if cs_out.gearShifter != GearShifter.drive and (extra_gears is None or
-       cs_out.gearShifter not in extra_gears):
-      events.add(EventName.wrongGear)
+    # if cs_out.doorOpen:
+    #   events.add(EventName.doorOpen)
+    # if cs_out.seatbeltUnlatched:
+    #   events.add(EventName.seatbeltNotLatched)
+    # if cs_out.gearShifter != GearShifter.drive and (extra_gears is None or
+    #    cs_out.gearShifter not in extra_gears):
+    #   events.add(EventName.wrongGear)
     if cs_out.gearShifter == GearShifter.reverse:
       events.add(EventName.reverseGear)
     if not cs_out.cruiseState.available:
@@ -235,6 +235,11 @@ class CarInterfaceBase(ABC):
         events.add(EventName.pcmEnable)
       elif not cs_out.cruiseState.enabled:
         events.add(EventName.pcmDisable)
+
+    # Auto_engage by Jangpoo
+    if cs_out.cruiseState.enabled:
+      if cs_out.gearShifter == GearShifter.drive and cs_out.vEgo > 15. * CV.KPH_TO_MS:
+        events.add(EventName.pcmEnable)
 
     return events
 

@@ -204,6 +204,9 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"HapticFeedbackWhenSpeedCamera", PERSISTENT},
 
     {"SoftRestartTriggered", CLEAR_ON_MANAGER_START},
+    {"ShowGearUI", PERSISTENT}, //boxkon
+    {"ShowTurnSignalUI", PERSISTENT}, //boxkon
+    {"ShowEngRPMUI", PERSISTENT},  //tenesi
 };
 
 } // namespace

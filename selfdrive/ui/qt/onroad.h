@@ -32,11 +32,16 @@ private:
 // container window for the NVG UI
 class NvgWindow : public CameraViewWidget {
   Q_OBJECT
+  Q_PROPERTY(bool left_blindspot MEMBER left_blindspot);
+  Q_PROPERTY(bool right_blindspot MEMBER right_blindspot);
 
 public:
   explicit NvgWindow(VisionStreamType type, QWidget* parent = 0);
   void updateState(const UIState &s);
 
+private:
+  bool left_blindspot = false;
+  bool right_blindspot = false;
 protected:
   void paintGL() override;
   void initializeGL() override;
@@ -46,6 +51,10 @@ protected:
   void drawLead(QPainter &painter, const cereal::ModelDataV2::LeadDataV3::Reader &lead_data, const QPointF &vd, bool is_radar);
   inline QColor redColor(int alpha = 255) { return QColor(201, 34, 49, alpha); }
   inline QColor whiteColor(int alpha = 255) { return QColor(255, 255, 255, alpha); }
+  inline QColor steeringpressedColor(int alpha = 255) { return QColor(0, 191, 255, alpha); }
+  inline QColor overrideColor(int alpha = 255) { return QColor(145, 155, 149, alpha); }
+  inline QColor magentaColor(int alpha = 255) { return QColor(255, 0, 255, alpha); }
+  inline QColor cyanColor(int alpha = 255) { return QColor(0, 255, 255, alpha); }
 
   double prev_draw_t = 0;
   FirstOrderFilter fps_filter;
@@ -85,6 +94,10 @@ protected:
   void drawGpsStatus(QPainter &p);
   void drawDebugText(QPainter &p);
   void drawHud(QPainter &p, const cereal::ModelDataV2::Reader &model);
+  //boxkon
+  void drawCurrentGear(QPainter &p);
+  //tenesi
+  void drawEngRpm(QPainter &p);
 
 private:
   QPixmap get_icon_iol_com(const char* key);

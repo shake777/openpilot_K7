@@ -682,6 +682,24 @@ CommunityPanel::CommunityPanel(QWidget* parent) : QWidget(parent) {
                                             "../assets/offroad/icon_shell.png",
                                             this));
 
+  toggles.append(new ParamControl("ShowGearUI",
+                                            tr("Show Gear UI"),
+                                            "",
+                                            "../assets/offroad/icon_shell.png",
+                                            this));  // boxkon
+
+  toggles.append(new ParamControl("ShowEngRPMUI",
+                                            tr("Show EngRPM UI"),
+                                            "",
+                                            "../assets/offroad/icon_shell.png",
+                                            this));  // tenesi
+
+  toggles.append(new ParamControl("ShowTurnSignalUI",
+                                            tr("Show Turnsignal UI"),
+                                            "",
+                                            "../assets/offroad/icon_shell.png",
+                                            this));  // boxkon
+
   for(ParamControl *toggle : toggles) {
     if(main_layout->count() != 0) {
       toggleLayout->addWidget(horizontal_line());
