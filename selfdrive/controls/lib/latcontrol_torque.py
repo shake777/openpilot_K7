@@ -68,10 +68,10 @@ class LatControlTorque(LatControl):
       actual_lateral_accel = actual_curvature * CS.vEgo ** 2
       lateral_accel_deadzone = curvature_deadzone * CS.vEgo ** 2
 
-      speed_factor = interp(CS.vEgo, [10, 20, 30, 40], [500, 300, 100, 0])
+      #speed_factor = interp(CS.vEgo, [10, 20, 30, 40], [500, 300, 100, 0])
       #low_speed_factor = interp(CS.vEgo, [10, 20, 30, 40], [500, 300, 100, 0]) # neokii c3
       #low_speed_factor = interp(CS.vEgo, [0, 15], [500, 0]) # comma 1st
-      #low_speed_factor = interp(CS.vEgo, [0, 10, 20], [500, 500, 200]) # comma 2nd TEST
+      speed_factor = interp(CS.vEgo,(CS.vEgo, [0, 10, 20], [500, 500, 200]) # comma 2nd TEST
       #low_speed_factor = interp(CS.vEgo, [0, 20, 30, 40], [200, 100, 50, 0]) # test 10=22mile(36km) 15=34mile (54km) 20=45mile(72km), 30=67mile(108), 40=90mile(144)
       #low_speed_factor = 0 # telluride
       
