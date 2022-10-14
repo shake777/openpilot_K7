@@ -380,6 +380,7 @@ struct CarControl {
   struct CruiseControl {
     cancel @0: Bool;
     resume @1: Bool;
+    override @4: Bool;
     speedOverrideDEPRECATED @2: Float32;
     accelOverrideDEPRECATED @3: Float32;
   }
@@ -527,9 +528,7 @@ struct CarParams {
   hasScc14 @77 :Bool;
   hasEms @78 :Bool;
   hasLfaHda @79 :Bool;
-  steerFaultMaxAngle @80 :Int16;
-  steerFaultMaxFrames @81 :Int16;
-  disableLateralLiveTuning @82 :Bool;
+  disableLateralLiveTuning @80 :Bool;
 
   struct LateralParams {
     torqueBP @0 :List(Int32);
@@ -664,6 +663,7 @@ struct CarParams {
     hud @11; # heads up display
     combinationMeter @12; # instrument cluster
     electricBrakeBooster @15;
+    shiftByWire @16;
     adas @19;
 
     # Toyota only
@@ -673,10 +673,12 @@ struct CarParams {
     # Honda only
     vsa @13; # Vehicle Stability Assist
     programmedFuelInjection @14;
-    shiftByWire @16;
 
     # Chrysler only
     hcp @18;  # Hybrid Control Processor
+
+    # Hyundai only
+    vcu @20;  # Vehicle (Motor) Control Unit
 
     debug @17;
   }
