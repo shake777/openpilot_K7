@@ -19,7 +19,7 @@ class CarControllerParams:
     if CP.carFingerprint in [CAR.KONA_HEV, CAR.KONA_EV]:
       self.STEER_DELTA_DOWN = 7
     else:
-      self.STEER_DELTA_DOWN = 6
+      self.STEER_DELTA_DOWN = 7
 
     self.STEER_DRIVER_ALLOWANCE = 50
     self.STEER_DRIVER_MULTIPLIER = 2
