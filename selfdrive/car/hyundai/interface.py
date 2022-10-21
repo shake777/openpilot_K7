@@ -87,7 +87,7 @@ class CarInterface(CarInterfaceBase):
         torque_tune(ret.lateralTuning, 2.5, 0.01)
 
     ret.steerRatio = 16.5
-    ret.steerActuatorDelay = 0.2
+    ret.steerActuatorDelay = 0.1  # Default delay
     ret.steerLimitTimer = 2.5
 
     # longitudinal
@@ -295,7 +295,7 @@ class CarInterface(CarInterfaceBase):
       tire_stiffness_factor = 0.8
       ret.centerToFront = ret.wheelbase * 0.5
     elif candidate in [CAR.K7, CAR.K7_HEV]:
-      ret.mass = 1850. + STD_CARGO_KG
+      ret.mass = 1595. + STD_CARGO_KG
       ret.wheelbase = 2.855
       ret.steerRatio = 15.5
       tire_stiffness_factor = 0.7
