@@ -4,7 +4,7 @@ const SteeringLimits HYUNDAI_STEERING_LIMITS = {
   .max_steer = 409,
   .max_rt_delta = 112,
   .max_rt_interval = 250000,
-  .max_rate_up = 10,
+  .max_rate_up = 6,
   .max_rate_down = 10,
   .driver_torque_allowance = 50,
   .driver_torque_factor = 2,
@@ -18,8 +18,8 @@ const SteeringLimits HYUNDAI_STEERING_LIMITS = {
   .has_steer_req_tolerance = true,
 };
 
-const int HYUNDAI_MAX_ACCEL = 200;  // 1/100 m/s2
-const int HYUNDAI_MIN_ACCEL = -350; // 1/100 m/s2
+const int HYUNDAI_MAX_ACCEL = 250;  // 1/100 m/s2
+const int HYUNDAI_MIN_ACCEL = -400; // 1/100 m/s2
 
 const CanMsg HYUNDAI_TX_MSGS[] = {
   {832, 0, 8},  // LKAS11 Bus 0
