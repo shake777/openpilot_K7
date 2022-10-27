@@ -9,7 +9,7 @@ from selfdrive.modeld.constants import T_IDXS
 
 # WARNING: this value was determined based on the model's training distribution,
 #          model predictions above this speed can be unpredictable
-V_CRUISE_MAX = 145  # kph
+V_CRUISE_MAX = 175  # kph
 V_CRUISE_MIN = 10  # kph
 V_CRUISE_ENABLE_MIN = 30  # kph
 V_CRUISE_INITIAL = 255  # kph

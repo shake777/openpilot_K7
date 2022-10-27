@@ -229,6 +229,10 @@ struct CarState {
     rr @3 :Float32;
   }
 
+  # Gear Current By Tenesi
+  currentGear @48 :Float32;
+  engRpm @49 :Float32;
+
   struct WheelSpeeds {
     # optional wheel speeds
     fl @0 :Float32;
@@ -423,6 +427,7 @@ struct CarControl {
       promptDistracted @8;
 
       slowingDownSpeed @9;
+      ding @10;        
     }
   }
 

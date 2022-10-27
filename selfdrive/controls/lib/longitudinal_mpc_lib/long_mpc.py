@@ -51,7 +51,7 @@ AUTO_TR_BP = [0., 30.*CV.KPH_TO_MS, 70.*CV.KPH_TO_MS, 110.*CV.KPH_TO_MS]
 AUTO_TR_V = [1.2, 1.3, 1.4, 1.5]
 
 AUTO_TR_CRUISE_GAP = 4
-DIFF_RADAR_VISION = 2.0
+DIFF_RADAR_VISION = 1.0
 
 
 # Fewer timestamps don't hurt performance and lead to
@@ -65,9 +65,9 @@ T_DIFFS = np.diff(T_IDXS, prepend=[0.])
 MIN_ACCEL = -3.5
 MAX_ACCEL = 2.0
 T_FOLLOW = 1.45
-COMFORT_BRAKE = 2.5
-STOP_DISTANCE = 6.0
-STOP_DISTANCE_E2E = 5.0
+COMFORT_BRAKE = 2.0
+STOP_DISTANCE = 5.0
+STOP_DISTANCE_E2E = 4.0
 
 def get_stopped_equivalence_factor(v_lead):
   return (v_lead**2) / (2 * COMFORT_BRAKE)

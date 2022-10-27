@@ -20,7 +20,7 @@ def get_params(candidate, ret):
     ret.mass = 2200
     ret.wheelbase = 3.15
     ret.steerRatio = 16.0
-    ret.steerActuatorDelay = 0.075
+    ret.steerActuatorDelay = 0.05
   elif candidate == CAR.GENESIS_EQ900_L:
     ret.mass = 2290
     ret.wheelbase = 3.45
