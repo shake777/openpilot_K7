@@ -78,10 +78,10 @@ typedef enum UIStatus {
 } UIStatus;
 
 const QColor bg_colors [] = {
-  [STATUS_DISENGAGED] =  QColor(0x17, 0x33, 0x49, 0xc8),
-  [STATUS_OVERRIDE] = QColor(0x91, 0x9b, 0x95, 0xf1),
-  [STATUS_ENGAGED] = QColor(0x17, 0x86, 0x44, 0xf1),
-  [STATUS_WARNING] = QColor(0xDA, 0x6F, 0x25, 0xf1),
+  [STATUS_DISENGAGED] =  QColor(0x17, 0x33, 0x49, 0x64),
+  [STATUS_OVERRIDE] = QColor(0x91, 0x9b, 0x95, 0xf1),  
+  [STATUS_ENGAGED] = QColor(0xFF, 0x00, 0xFF, 0x64),
+  [STATUS_WARNING] = QColor(0xA3, 0xD9, 0xFF, 0x64),
   [STATUS_ALERT] = QColor(0xC9, 0x22, 0x31, 0xf1),
 };
 
@@ -91,6 +91,9 @@ typedef struct UIScene {
   mat3 view_from_calib = DEFAULT_CALIBRATION;
   mat3 view_from_wide_calib = DEFAULT_CALIBRATION;
   cereal::PandaState::PandaType pandaType;
+  // Brake on SPD
+  bool brakePress;
+  bool brakeLights;
 
   // modelV2
   float lane_line_probs[4];

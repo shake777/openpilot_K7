@@ -677,6 +677,12 @@ void AnnotatedCameraWidget::drawSpeed(QPainter &p) {
     color = QColor(255, a, a, 230);
   }
 
+  bool brakeLights = car_state.getBrakeLights();
+  bool brakePress = car_state.getBrakePressed();
+
+  if( brakePress ) color = redColor(200);
+  else if( brakeLights ) color = magentaColor(100);
+
   QString speed;
   speed.sprintf("%.0f", cur_speed);
   configFont(p, "Inter", 176, "Bold");
