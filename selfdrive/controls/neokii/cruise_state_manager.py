@@ -11,6 +11,11 @@ V_CRUISE_DELTA_KM = 10
 
 ButtonType = car.CarState.ButtonEvent.Type
 
+
+def is_radar_disabler(CP):
+  return CP.openpilotLongitudinalControl and CP.sccBus == 0
+
+
 class CruiseStateManager:
   __instance = None
 
@@ -46,11 +51,13 @@ class CruiseStateManager:
     self.is_metric = Params().get_bool('IsMetric')
     self.cruise_state_control = Params().get_bool('CruiseStateControl')
 
-  def allow_adjust_button(self, CP):
-    if not CP.openpilotLongitudinalControl:
-      return True
-
+  def allow_resume_spam(self, CP):
+    if is_radar_disabler(CP):
+      return False
     return not self.cruise_state_control
+
+  def allow_set_speed_spam(self, CP):
+    return self.allow_resume_spam(CP)
 
   # CS - CarState cereal message
   def update(self, CS, main_buttons, cruise_buttons, buttons_dict, available=-1, cruise_state_control=True):
