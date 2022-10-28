@@ -10,6 +10,7 @@ from cereal import car, log
 from common.params import Params
 from common.realtime import config_realtime_process, DT_MDL
 from common.filter_simple import FirstOrderFilter
+from selfdrive.controls.ntune import ntune_torque_get, ntune_common_get
 from system.swaglog import cloudlog
 from selfdrive.controls.lib.vehicle_model import ACCELERATION_DUE_TO_GRAVITY
 
@@ -93,9 +94,16 @@ class PointBuckets:
 
 
 class TorqueEstimator:
+
+  def get_friction(self):
+    return ntune_torque_get('friction')
+
+  def get_lat_accel_factor(self):
+    return ntune_torque_get('latAccelFactor')
+
   def __init__(self, CP, decimated=False):
     self.hist_len = int(HISTORY / DT_MDL)
-    self.lag = CP.steerActuatorDelay + .2   # from controlsd
+    self.lag = ntune_common_get('steerActuatorDelay') + .2   # from controlsd
     if decimated:
       self.min_bucket_points = MIN_BUCKET_POINTS / 10
       self.min_points_total = MIN_POINTS_TOTAL_QLOG
@@ -223,6 +231,8 @@ class TorqueEstimator:
     liveTorqueParameters = msg.liveTorqueParameters
     liveTorqueParameters.version = VERSION
     liveTorqueParameters.useParams = self.use_params
+
+    self.checkNTune()
 
     if self.filtered_points.is_valid():
       latAccelFactor, latAccelOffset, friction_coeff = self.estimate_params()
