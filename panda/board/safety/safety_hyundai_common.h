@@ -1,6 +1,9 @@
 #ifndef SAFETY_HYUNDAI_COMMON_H
 #define SAFETY_HYUNDAI_COMMON_H
 
+// safety param flags
+// first byte is for flags, second is for max steer
+const int HYUNDAI_PARAM_MAX_STEER = 0xff00;
 const int HYUNDAI_PARAM_EV_GAS = 1;
 const int HYUNDAI_PARAM_HYBRID_GAS = 2;
 const int HYUNDAI_PARAM_LONGITUDINAL = 4;
@@ -19,11 +22,13 @@ enum {
 bool hyundai_ev_gas_signal = false;
 bool hyundai_hybrid_gas_signal = false;
 bool hyundai_longitudinal = false;
+int hyundai_max_steer = 0;
 uint8_t hyundai_last_button_interaction;  // button messages since the user pressed an enable button
 
 void hyundai_common_init(uint16_t param) {
   hyundai_ev_gas_signal = GET_FLAG(param, HYUNDAI_PARAM_EV_GAS);
   hyundai_hybrid_gas_signal = !hyundai_ev_gas_signal && GET_FLAG(param, HYUNDAI_PARAM_HYBRID_GAS);
+  hyundai_max_steer = (param & HYUNDAI_PARAM_MAX_STEER) * 10U;
 
   hyundai_last_button_interaction = HYUNDAI_PREV_BUTTON_SAMPLES;
 
