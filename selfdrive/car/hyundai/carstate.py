@@ -45,6 +45,10 @@ class CarState(CarStateBase):
     self.params = CarControllerParams(CP)
     self.mdps_error_cnt = 0
 
+    # for activate HDA
+    self.has_hda = CP.hasHda
+    self.hda_mfc = None
+
   def update(self, cp, cp_cam):
     if self.CP.carFingerprint in CANFD_CAR:
       return self.update_canfd(cp, cp_cam)
@@ -197,6 +201,9 @@ class CarState(CarStateBase):
     if self.CP.openpilotLongitudinalControl and CruiseStateManager.instance().cruise_state_control:
       available = ret.cruiseState.available if self.CP.sccBus == 2 else -1
       CruiseStateManager.instance().update(ret, self.main_buttons, self.cruise_buttons, BUTTONS_DICT, available)
+
+    # for activate HDA
+    self.hda_mfc = cp_cam.vl["LFAHDA_MFC"]
 
     return ret
 
@@ -527,6 +534,19 @@ class CarState(CarStateBase):
           ("CF_VSM_DecCmdAct", "FCA11"),
         ]
         checks.append(("FCA11", 50))
+
+      # for activate HDA
+      if CP.hasHda or CP.carFingerprint in FEATURES["has_hda"]:
+        signals += [
+          ("HDA_USM", "LFAHDA_MFC"),
+          ("HDA_Active", "LFAHDA_MFC"),
+          ("HDA_Icon_State", "LFAHDA_MFC"),
+          ("HDA_LdwSysState", "LFAHDA_MFC"),
+          ("HDA_Icon_Wheel", "LFAHDA_MFC"),
+          ("HDA_Chime", "LFAHDA_MFC"),
+          ("HDA_VSetReq", "LFAHDA_MFC"),
+        ]
+        checks += [("LFAHDA_MFC", 20)]
 
     return CANParser(DBC[CP.carFingerprint]["pt"], signals, checks, 2, enforce_checks=False)
 

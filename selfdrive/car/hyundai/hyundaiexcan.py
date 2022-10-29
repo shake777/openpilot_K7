@@ -1,5 +1,6 @@
 import crcmod
-
+import copy
+from selfdrive.car.hyundai.hyundaican import create_lkas11
 hyundai_checksum = crcmod.mkCrcFun(0x11D, initCrc=0xFD, rev=False, xorOut=0xdf)
 
 def create_mdps12(packer, frame, mdps12):
@@ -15,6 +16,36 @@ def create_mdps12(packer, frame, mdps12):
 
   return packer.make_can_msg("MDPS12", 2, values)
 
+def create_hda_mfc(packer, enabled, active, CS, left_lane, right_lane):
+  values = copy.copy(CS.hda_mfc)
+
+  ldwSysState = 0
+  if left_lane:
+    ldwSysState += 1
+  if right_lane:
+    ldwSysState += 2
+
+  values["HDA_LdwSysState"] = ldwSysState
+  values["HDA_USM"] = 2
+  values["HDA_VSetReq"] = enabled
+
+  if active > 1 and CS.out.cruiseState.enabled:
+    values["HDA_Active"] = 0
+    values["HDA_Icon_Wheel"] = 1
+    values["HDA_Icon_State"] = 2
+    values["HDA_Chime"] = 1
+  elif active > 1 and not CS.out.cruiseState.enabled:
+    values["HDA_Active"] = 0
+    values["HDA_Icon_Wheel"] = 0
+    values["HDA_Icon_State"] = 1
+    values["HDA_Chime"] = 0
+  else:
+    values["HDA_Active"] = 0
+    values["HDA_Icon_Wheel"] = 0
+    values["HDA_Icon_State"] = 0
+    values["HDA_Chime"] = 0
+
+  return packer.make_can_msg("LFAHDA_MFC", 0, values)
 def create_acc_commands(packer, enabled, accel, upper_jerk, idx, lead_visible,
                         set_speed, stopping, long_override, CS):
   commands = []

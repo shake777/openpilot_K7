@@ -9,6 +9,7 @@ from selfdrive.car import apply_std_steer_torque_limits
 from selfdrive.car.hyundai import hyundaicanfd, hyundaican, hyundaiexcan
 from selfdrive.car.hyundai.values import HyundaiFlags, Buttons, CarControllerParams, CANFD_CAR, CAR, \
   LEGACY_SAFETY_MODE_CAR, FEATURES
+from selfdrive.car.hyundai.values_community import FEATURES
 from selfdrive.controls.neokii.cruise_state_manager import CruiseStateManager
 from selfdrive.controls.neokii.navi_controller import SpeedLimiter
 from selfdrive.controls.neokii.speed_controller import CREEP_SPEED
@@ -215,6 +216,8 @@ class CarController:
       # 20 Hz LFA MFA message
       if self.frame % 5 == 0 and self.car_fingerprint in FEATURES["send_lfa_mfa"]:
         can_sends.append(hyundaican.create_lfahda_mfc(self.packer, CC.enabled, SpeedLimiter.instance().get_active()))
+      elif self.frame % 5 == 0 and self.car_fingerprint in FEATURES["has_hda"]:
+        can_sends.append(hyundaiexcan.create_hda_mfc(self.packer, CC.enabled, SpeedLimiter.instance().get_active(), CS, hud_control.leftLaneVisible, hud_control.rightLaneVisible))
 
       CC.aReqValue = CS.scc12["aReqValue"] if "aReqValue" in CS.scc12 else self.prev_accel_req_value
       self.prev_accel_req_value = CC.aReqValue
