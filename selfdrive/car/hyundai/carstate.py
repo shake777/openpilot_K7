@@ -44,6 +44,7 @@ class CarState(CarStateBase):
 
     self.params = CarControllerParams(CP)
     self.mdps_error_cnt = 0
+    self.cruise_unavail_cnt = 0
 
     # for activate HDA
     self.has_hda = CP.hasHda
@@ -159,6 +160,9 @@ class CarState(CarStateBase):
 
     # ------------------------------------------------------------------------
     # custom
+
+    self.cruise_unavail_cnt += 1 if cp.vl["TCS13"]["CF_VSM_Avail"] != 1 and cp.vl["TCS13"]["ACCEnable"] != 0 else -self.cruise_unavail_cnt
+    self.brake_error = self.cruise_unavail_cnt > 100
 
     self.mdps12 = copy.copy(cp.vl["MDPS12"])
     self.scc11 = copy.copy(cp_cruise.vl["SCC11"])
@@ -322,10 +326,12 @@ class CarState(CarStateBase):
       ("CF_Clu_VehicleSpeed", "CLU15"),
 
       ("ACCEnable", "TCS13"),
-      ("ACC_REQ", "TCS13"),
+      ("BrakeLight", "TCS13"),
+      ("aBasis", "TCS13"),
       ("DriverBraking", "TCS13"),
-      ("StandStill", "TCS13"),
       ("PBRAKE_ACT", "TCS13"),
+      ("DriverOverride", "TCS13"),
+      ("CF_VSM_Avail", "TCS13"),
 
       ("ESC_Off_Step", "TCS15"),
       ("AVH_LAMP", "TCS15"),
@@ -350,8 +356,6 @@ class CarState(CarStateBase):
       ("PRESSURE_FR", "TPMS11"),
       ("PRESSURE_RL", "TPMS11"),
       ("PRESSURE_RR", "TPMS11"),
-
-      ("BrakeLight", "TCS13"),
     ]
     checks = [
       # address, frequency
