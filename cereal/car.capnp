@@ -118,6 +118,9 @@ struct CarEvent @0x9b1657f34caf3ad3 {
 
     slowingDownSpeed @116;
     slowingDownSpeedSound @117;
+    cruiseOn @118;
+    cruiseOff @119;
+    noTargetAcc @120;
 
     radarCanErrorDEPRECATED @15;
     communityFeatureDisallowedDEPRECATED @62;
@@ -427,7 +430,10 @@ struct CarControl {
       promptDistracted @8;
 
       slowingDownSpeed @9;
-      ding @10;        
+      cruiseOn @10;
+      cruiseOff @11;
+
+      ding @12; 
     }
   }
 
