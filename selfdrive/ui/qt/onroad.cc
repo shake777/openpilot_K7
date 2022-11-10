@@ -242,7 +242,6 @@ void OnroadAlerts::paintEvent(QPaintEvent *event) {
   }
 }
 
-// AnnotatedCameraWidget
 
 AnnotatedCameraWidget::AnnotatedCameraWidget(VisionStreamType type, QWidget* parent) : last_update_params(0), fps_filter(UI_FREQ, 3, 1. / UI_FREQ), CameraWidget("camerad", type, true, parent) {
   pm = std::make_unique<PubMaster, const std::initializer_list<const char *>>({"uiDebug"});
