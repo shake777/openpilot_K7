@@ -95,6 +95,7 @@ def create_acc_commands(packer, enabled, accel, upper_jerk, idx, lead_visible,
     if enabled:
       values["ACCMode"] = 2 if CS.out.gasPressed and (accel > -0.2) else 1
       values["ObjGap"] = obj_gap
+      values["ObjGap2"] = 1 if obj_gap else 0
       if stopping:
         values["JerkUpperLimit"] = 0.5
         values["JerkLowerLimit"] = 10.
