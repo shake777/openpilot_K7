@@ -27,7 +27,7 @@ class CarInterface(CarInterfaceBase):
     v_current_kph = current_speed * CV.MS_TO_KPH
 
     gas_max_bp = [10., 20., 50., 70., 130., 150.]
-    gas_max_v = [1.3, 1.1, 0.63, 0.44, 0.15, 0.1]
+    gas_max_v = [1.25, 1.1, 0.63, 0.44, 0.15, 0.1]
 
     return CarControllerParams.ACCEL_MIN, interp(v_current_kph, gas_max_bp, gas_max_v)
 
@@ -249,11 +249,11 @@ class CarInterface(CarInterfaceBase):
 
     ret.stoppingControl = True
     ret.startingState = True
-    ret.vEgoStarting = 0.2
-    ret.vEgoStopping = 0.5
-    ret.startAccel = 1.5
-    ret.longitudinalActuatorDelayLowerBound = 0.3
-    ret.longitudinalActuatorDelayUpperBound = 0.3
+    ret.vEgoStarting = 0.3
+    ret.vEgoStopping = 0.3
+    ret.startAccel = 1.3
+    ret.longitudinalActuatorDelayLowerBound = 0.5
+    ret.longitudinalActuatorDelayUpperBound = 0.5
 
     # *** feature detection ***
     if candidate in CANFD_CAR:
@@ -392,4 +392,5 @@ class CarInterface(CarInterfaceBase):
       "CRUISE_BUTTONS": button,
     }
     return self.CC.packer.make_can_msg("CRUISE_BUTTONS", 5, values)
+
 
