@@ -71,23 +71,86 @@
     <name>AnnotatedCameraWidget</name>
     <message>
         <source>km/h</source>
-        <translation>km/h</translation>
+        <translation type="vanished">km/h</translation>
     </message>
     <message>
         <source>mph</source>
-        <translation>mph</translation>
+        <translation type="vanished">mph</translation>
     </message>
     <message>
         <source>MAX</source>
-        <translation>MAX</translation>
+        <translation type="vanished">MAX</translation>
     </message>
     <message>
         <source>SPEED</source>
-        <translation>SPEED</translation>
+        <translation type="vanished">SPEED</translation>
     </message>
     <message>
         <source>LIMIT</source>
-        <translation>LIMIT</translation>
+        <translation type="vanished">LIMIT</translation>
+    </message>
+</context>
+<context>
+    <name>CommunityPanel</name>
+    <message>
+        <source>Select your car</source>
+        <translation>차량선택</translation>
+    </message>
+    <message>
+        <source>CHANGE</source>
+        <translation>변경</translation>
+    </message>
+    <message>
+        <source>SELECT</source>
+        <translation>선택</translation>
+    </message>
+    <message>
+        <source>Select a car</source>
+        <translation>차를 선택하세요</translation>
+    </message>
+    <message>
+        <source>SCC on BUS 2</source>
+        <translation>SCC가 2번 버스에 있음</translation>
+    </message>
+    <message>
+        <source>If SCC is on bus 2, turn it on.</source>
+        <translation>SCC 배선이 2번 버스에 있을 경우 체크하세요.</translation>
+    </message>
+    <message>
+        <source>Npilot controls Cruise State (Experimental)</source>
+        <translation type="vanished">크루즈 상태 제어 (실험적 기능)</translation>
+    </message>
+    <message>
+        <source>LDWS only</source>
+        <translation>LDWS 차량</translation>
+    </message>
+    <message>
+        <source>If your car only supports LDWS, turn it on.</source>
+        <translation>LDWS 전용 차량일 경우 체크하세요.</translation>
+    </message>
+    <message>
+        <source>Haptic feedback (speed-cam alert)</source>
+        <translation>스티어링 햅틱 진동 사용(카메라캠이 있을 경우)</translation>
+    </message>
+    <message>
+        <source>Haptic feedback when a speed camera is detected</source>
+        <translation>제한속도 카메라가 있으면 스티어링 휠의 진동을 사용합니다.</translation>
+    </message>
+    <message>
+        <source>Use lane lines instead of e2e</source>
+        <translation>e2e 대신 차선 사용</translation>
+    </message>
+    <message>
+        <source>Show Debug Message</source>
+        <translation>디버그 메세지 출력</translation>
+    </message>
+    <message>
+        <source>Openpilot controls cruise on/off, gap and set speed.</source>
+        <translation>차가 아닌 openpilot이 크루즈 상태를 제어합니다. (크루즈 켜기/끄기, 설정속도/유지거리 조절)</translation>
+    </message>
+    <message>
+        <source>Openpilot controls Cruise State (Experimental)</source>
+        <translation>크루즈 상태 제어</translation>
     </message>
 </context>
 <context>
@@ -239,12 +302,28 @@
         <translation>전원을 종료하려면 해제하세요</translation>
     </message>
     <message>
+        <source>Soft restart</source>
+        <translation>소프트 재시작</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to reset calibration and live params?</source>
+        <translation>캘리브레이션과 라이브 파라미터를 재설정하시겠습니까?</translation>
+    </message>
+    <message>
+        <source>Rebuild</source>
+        <translation>전체 재빌드</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to rebuild?</source>
+        <translation>전체 재빌드를 하시겠습니까?</translation>
+    </message>
+    <message>
         <source>Reset</source>
-        <translation>리셋</translation>
+        <translation>초기화</translation>
     </message>
     <message>
         <source>Review</source>
-        <translation>다시보기</translation>
+        <translation>리뷰</translation>
     </message>
 </context>
 <context>
@@ -285,11 +364,11 @@
     <name>ExperimentalModeButton</name>
     <message>
         <source>EXPERIMENTAL MODE ON</source>
-        <translation type="unfinished"></translation>
+        <translation>실험 모드</translation>
     </message>
     <message>
         <source>CHILL MODE ON</source>
-        <translation type="unfinished"></translation>
+        <translation>안정(CHILL) 모드</translation>
     </message>
 </context>
 <context>
@@ -309,19 +388,19 @@
     <name>Installer</name>
     <message>
         <source>Installing...</source>
-        <translation>설치중...</translation>
+        <translation type="vanished">설치중...</translation>
     </message>
     <message>
         <source>Receiving objects: </source>
-        <translation>수신중： </translation>
+        <translation type="vanished">수신중： </translation>
     </message>
     <message>
         <source>Resolving deltas: </source>
-        <translation>델타병합： </translation>
+        <translation type="vanished">델타병합： </translation>
     </message>
     <message>
         <source>Updating files: </source>
-        <translation>파일갱신： </translation>
+        <translation type="vanished">파일갱신： </translation>
     </message>
 </context>
 <context>
@@ -580,46 +659,64 @@ location set</source>
     <name>Reset</name>
     <message>
         <source>Reset failed. Reboot to try again.</source>
-        <translation>초기화 실패. 재부팅후 다시 시도하세요.</translation>
+        <translation type="vanished">초기화 실패. 재부팅후 다시 시도하세요.</translation>
     </message>
     <message>
         <source>Are you sure you want to reset your device?</source>
-        <translation>장치를 초기화 하시겠습니까?</translation>
+        <translation type="vanished">장치를 초기화 하시겠습니까?</translation>
     </message>
     <message>
         <source>Resetting device...</source>
-        <translation>장치 초기화중...</translation>
+        <translation type="vanished">장치 초기화중...</translation>
     </message>
     <message>
         <source>System Reset</source>
-        <translation>장치 초기화</translation>
+        <translation type="vanished">장치 초기화</translation>
     </message>
     <message>
         <source>System reset triggered. Press confirm to erase all content and settings. Press cancel to resume boot.</source>
-        <translation>장치를 초기화 합니다. 확인버튼을 누르면 모든 내용과 설정이 초기화됩니다. 부팅을 재개하려면 취소를 누르세요.</translation>
+        <translation type="vanished">장치를 초기화 합니다. 확인버튼을 누르면 모든 내용과 설정이 초기화됩니다. 부팅을 재개하려면 취소를 누르세요.</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>취소</translation>
+        <translation type="vanished">취소</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>재부팅</translation>
+        <translation type="vanished">재부팅</translation>
     </message>
     <message>
         <source>Confirm</source>
-        <translation>확인</translation>
+        <translation type="vanished">확인</translation>
     </message>
     <message>
         <source>Unable to mount data partition. Press confirm to reset your device.</source>
-        <translation>데이터 파티션을 마운트할 수 없습니다. 확인 버튼을 눌러 장치를 리셋합니다.</translation>
+        <translation type="vanished">데이터 파티션을 마운트할 수 없습니다. 확인 버튼을 눌러 장치를 리셋합니다.</translation>
+    </message>
+</context>
+<context>
+    <name>RichTextDialog</name>
+    <message>
+        <source>Ok</source>
+        <translation type="vanished">확인</translation>
+    </message>
+</context>
+<context>
+    <name>SelectCar</name>
+    <message>
+        <source>Back</source>
+        <translation>뒤로</translation>
+    </message>
+    <message>
+        <source>[ Not selected ]</source>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>SettingsWindow</name>
     <message>
         <source>×</source>
-        <translation>×</translation>
+        <translation type="vanished">×</translation>
     </message>
     <message>
         <source>Device</source>
@@ -641,88 +738,96 @@ location set</source>
         <source>Navigation</source>
         <translation>네비게이션</translation>
     </message>
+    <message>
+        <source>← Back</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Community</source>
+        <translation>커뮤니티</translation>
+    </message>
 </context>
 <context>
     <name>Setup</name>
     <message>
         <source>WARNING: Low Voltage</source>
-        <translation>경고: 전압이 낮습니다</translation>
+        <translation type="vanished">경고: 전압이 낮습니다</translation>
     </message>
     <message>
         <source>Power your device in a car with a harness or proceed at your own risk.</source>
-        <translation>하네스 보드에 차량의 전원을 연결하세요.</translation>
+        <translation type="vanished">하네스 보드에 차량의 전원을 연결하세요.</translation>
     </message>
     <message>
         <source>Power off</source>
-        <translation>전원 종료</translation>
+        <translation type="vanished">전원 종료</translation>
     </message>
     <message>
         <source>Continue</source>
-        <translation>계속</translation>
+        <translation type="vanished">계속</translation>
     </message>
     <message>
         <source>Getting Started</source>
-        <translation>설정 시작</translation>
+        <translation type="vanished">설정 시작</translation>
     </message>
     <message>
         <source>Before we get on the road, let’s finish installation and cover some details.</source>
-        <translation>출발하기 전에 설정을 완료하고 몇 가지 세부 사항을 살펴보겠습니다.</translation>
+        <translation type="vanished">출발하기 전에 설정을 완료하고 몇 가지 세부 사항을 살펴보겠습니다.</translation>
     </message>
     <message>
         <source>Connect to Wi-Fi</source>
-        <translation>wifi 연결</translation>
+        <translation type="vanished">wifi 연결</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>뒤로</translation>
+        <translation type="vanished">뒤로</translation>
     </message>
     <message>
         <source>Continue without Wi-Fi</source>
-        <translation>wifi 연결없이 계속하기</translation>
+        <translation type="vanished">wifi 연결없이 계속하기</translation>
     </message>
     <message>
         <source>Waiting for internet</source>
-        <translation>네트워크 접속을 기다립니다</translation>
+        <translation type="vanished">네트워크 접속을 기다립니다</translation>
     </message>
     <message>
         <source>Choose Software to Install</source>
-        <translation>설치할 소프트웨어를 선택하세요</translation>
+        <translation type="vanished">설치할 소프트웨어를 선택하세요</translation>
     </message>
     <message>
         <source>Dashcam</source>
-        <translation>Dashcam</translation>
+        <translation type="vanished">Dashcam</translation>
     </message>
     <message>
         <source>Custom Software</source>
-        <translation>Custom Software</translation>
+        <translation type="vanished">Custom Software</translation>
     </message>
     <message>
         <source>Enter URL</source>
-        <translation>URL 입력</translation>
+        <translation type="vanished">URL 입력</translation>
     </message>
     <message>
         <source>for Custom Software</source>
-        <translation>for Custom Software</translation>
+        <translation type="vanished">for Custom Software</translation>
     </message>
     <message>
         <source>Downloading...</source>
-        <translation>다운로드중...</translation>
+        <translation type="vanished">다운로드중...</translation>
     </message>
     <message>
         <source>Download Failed</source>
-        <translation>다운로드 실패</translation>
+        <translation type="vanished">다운로드 실패</translation>
     </message>
     <message>
         <source>Ensure the entered URL is valid, and the device’s internet connection is good.</source>
-        <translation>입력된 URL이 유효하고 장치의 네트워크 연결이 잘 되어 있는지 확인하세요.</translation>
+        <translation type="vanished">입력된 URL이 유효하고 장치의 네트워크 연결이 잘 되어 있는지 확인하세요.</translation>
     </message>
     <message>
         <source>Reboot device</source>
-        <translation>재부팅</translation>
+        <translation type="vanished">재부팅</translation>
     </message>
     <message>
         <source>Start over</source>
-        <translation>다시 시작</translation>
+        <translation type="vanished">다시 시작</translation>
     </message>
 </context>
 <context>
@@ -875,7 +980,7 @@ location set</source>
     </message>
     <message>
         <source>Uninstall</source>
-        <translation>삭제</translation>
+        <translation>제거</translation>
     </message>
 </context>
 <context>
@@ -982,6 +1087,14 @@ location set</source>
         <translation>openpilot 롱컨트롤 (실험적)</translation>
     </message>
     <message>
+        <source>openpilot longitudinal control is not currently available for this car.</source>
+        <translation type="vanished">현재 이 차량에는 openpilot 롱컨트롤을 사용할 수 없습니다.</translation>
+    </message>
+    <message>
+        <source>Enable experimental longitudinal control to enable this.</source>
+        <translation type="vanished">openpilot 롱컨트롤을 활성화합니다. (실험적)</translation>
+    </message>
+    <message>
         <source>Disengage on Accelerator Pedal</source>
         <translation>가속페달 조작시 해제</translation>
     </message>
@@ -1007,62 +1120,86 @@ location set</source>
     </message>
     <message>
         <source>Experimental Mode</source>
-        <translation>실험적 모드</translation>
+        <translation>실험 모드</translation>
+    </message>
+    <message>
+        <source>    openpilot defaults to driving in &lt;b&gt;chill mode&lt;/b&gt;.    Experimental mode enables &lt;b&gt;alpha-level features&lt;/b&gt; that aren&apos;t ready for chill mode.     Experimental features are listed below:    &lt;br&gt;     &lt;h4&gt;🌮 End-to-End Longitudinal Control 🌮&lt;/h4&gt;     Let the driving model control the gas and brakes. openpilot will drive as it thinks a human would, including stopping for red lights and stop signs. Since the driving model decides which speed to drive, the set speed will only act as an upper bound.</source>
+        <translation type="vanished">오픈파일럿은 기본적으로 &lt;b&gt;chill 모드&lt;/b&gt;로 동작합니다. 실험 모드는 chill 모드가 아닌 &lt;b&gt;알파수준&lt;/b&gt;의 기능들입니다.&lt;br&gt;실험적 기능은 아래와 같습니다.&lt;br&gt;&lt;br&gt;&lt;h4&gt;🌮 End-to-End(종단간) 롱컨트롤 🌮&lt;/h4&gt;&lt;br&gt;모델이 가감속을 수행하며 적색 신호등및 정지 신호에 대한 감속및 정지를 포함하여 사람처럼 운전합니다.&lt;br&gt;모델이 주행할 속도를 결정하므로 설정된 속도는 상한선으로만 작용합니다.</translation>
+    </message>
+    <message>
+        <source>openpilot defaults to the car&apos;s built-in ACC instead of openpilot&apos;s longitudinal control on this car. Enable this to switch to openpilot longitudinal control.</source>
+        <translation type="vanished">openpilot은 차량의 내장 ACC로 기본 설정됩니다. 롱컨트롤으로 전환하려면 이 옵션을 활성화하세요.</translation>
     </message>
     <message>
         <source>WARNING: openpilot longitudinal control is experimental for this car and will disable Automatic Emergency Braking (AEB).</source>
-        <translation>경고: openpilot 롱컨트롤은 실험적인 기능으로 차량의 자동긴급제동(AEB)를 비활성화합니다.</translation>
+        <translation>경고: openpilot long control은 실험적 기능이며 차량의 AEB(긴급제동)이 비활성화됩니다.</translation>
     </message>
     <message>
         <source>On this car, openpilot defaults to the car&apos;s built-in ACC instead of openpilot&apos;s longitudinal control. Enable this to switch to openpilot longitudinal control. Enabling Experimental mode is recommended when using experimental openpilot longitudinal control.</source>
-        <translation type="unfinished"></translation>
+        <translation>이 차량은 openpilot 롱컨트롤 대신 차량의 내장 ACC로 기본 설정됩니다. openpilot 롱컨트롤을 사용하려면 이 옵션을 활성화하세요. 실험적 openpilot 롱컨트롤을 사용하는 경우 실험적 모드를 활성화 하세요.</translation>
     </message>
     <message>
-        <source>    openpilot defaults to driving in &lt;b&gt;chill mode&lt;/b&gt;.    Experimental mode enables &lt;b&gt;alpha-level features&lt;/b&gt; that aren&apos;t ready for chill mode.     Experimental features are listed below:     &lt;br&gt;     &lt;h4&gt;🌮 End-to-End Longitudinal Control 🌮&lt;/h4&gt;     Let the driving model control the gas and brakes. openpilot will drive as it thinks a human would, including stopping for red lights and stop signs.     Since the driving model decides the speed to drive, the set speed will only act as an upper bound. This is an alpha quality feature; mistakes should be expected.     &lt;br&gt;     &lt;h4&gt;New Driving Visualization&lt;/h4&gt;     The driving visualization will transition to the road-facing wide-angle camera at low speeds to better show some turns. The Experimental mode logo will also be shown in the top right corner.    </source>
-        <translation type="unfinished"></translation>
+        <source>openpilot defaults to driving in &lt;b&gt;chill mode&lt;/b&gt;. Experimental mode enables &lt;b&gt;alpha-level features&lt;/b&gt; that aren&apos;t ready for chill mode. Experimental features are listed below:</source>
+        <translation>openpilot은 기본적으로 &lt;b&gt;안정적(chill) 모드&lt;/b&gt;로 주행합니다. 실험적 모드는 안정적 모드에 준비되지 않은 &lt;b&gt;알파 수준 기능&lt;/b&gt;을 활성화 합니다. 실험 모드의 특징은 아래와 같습니다.</translation>
+    </message>
+    <message>
+        <source>🌮 End-to-End Longitudinal Control 🌮</source>
+        <translation>End to End 롱컨트롤</translation>
+    </message>
+    <message>
+        <source>Let the driving model control the gas and brakes. openpilot will drive as it thinks a human would, including stopping for red lights and stop signs. Since the driving model decides the speed to drive, the set speed will only act as an upper bound. This is an alpha quality feature; mistakes should be expected.</source>
+        <translation>주행 모델이 가스와 브레이크를 제어합니다. openpilot은 적색 신호등과 정지 신호에 대한 정지를 포함하여 사람처럼 운전합니다. 주행 속도는 주행 모델에 따라 결정되므로 설정된 속도는 상한선으로만 작용합니다. 이것은 알파 품질 기능입니다. 실수가 있을 수도 있다는걸 인지해야 합니다.</translation>
+    </message>
+    <message>
+        <source>New Driving Visualization</source>
+        <translation>새로운 주행 시각화</translation>
+    </message>
+    <message>
+        <source>The driving visualization will transition to the road-facing wide-angle camera at low speeds to better show some turns. The Experimental mode logo will also be shown in the top right corner.</source>
+        <translation>운전 시각화는 저속으로 도로를 향한 광각 카메라로 전환되어 일부 회전을 더 잘 보여줍니다. 실험 모드 로고도 오른쪽 상단에 표시됩니다.</translation>
     </message>
     <message>
         <source>Experimental mode is currently unavailable on this car, since the car&apos;s stock ACC is used for longitudinal control.</source>
-        <translation type="unfinished"></translation>
+        <translation>차량의 순정 ACC가 사용되기 때문에 현재 이 차량에서는 실험 모드를 사용할 수 없습니다.</translation>
     </message>
     <message>
         <source>Enable experimental longitudinal control to allow experimental mode.</source>
-        <translation type="unfinished"></translation>
+        <translation>실험 모드를 허용하려면 실험 롱컨트롤을 사용으로 설정하세요.</translation>
     </message>
 </context>
 <context>
     <name>Updater</name>
     <message>
         <source>Update Required</source>
-        <translation>업데이트 필요</translation>
+        <translation type="vanished">업데이트 필요</translation>
     </message>
     <message>
         <source>An operating system update is required. Connect your device to Wi-Fi for the fastest update experience. The download size is approximately 1GB.</source>
-        <translation>OS 업데이트가 필요합니다. 장치를 wifi에 연결하면 가장 빠른 업데이트 경험을 제공합니다. 다운로드 크기는 약 1GB입니다.</translation>
+        <translation type="vanished">OS 업데이트가 필요합니다. 장치를 wifi에 연결하면 가장 빠른 업데이트 경험을 제공합니다. 다운로드 크기는 약 1GB입니다.</translation>
     </message>
     <message>
         <source>Connect to Wi-Fi</source>
-        <translation>wifi 연결</translation>
+        <translation type="vanished">wifi 연결</translation>
     </message>
     <message>
         <source>Install</source>
-        <translation>설치</translation>
+        <translation type="vanished">설치</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>뒤로</translation>
+        <translation type="vanished">뒤로</translation>
     </message>
     <message>
         <source>Loading...</source>
-        <translation>로딩중...</translation>
+        <translation type="vanished">로딩중...</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>재부팅</translation>
+        <translation type="vanished">재부팅</translation>
     </message>
     <message>
         <source>Update failed</source>
-        <translation>업데이트 실패</translation>
+        <translation type="vanished">업데이트 실패</translation>
     </message>
 </context>
 <context>

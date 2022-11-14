@@ -126,18 +126,17 @@ void TogglesPanel::showEvent(QShowEvent *event) {
 void TogglesPanel::updateToggles() {
   auto e2e_toggle = toggles["ExperimentalMode"];
   auto op_long_toggle = toggles["ExperimentalLongitudinalEnabled"];
-  const QString e2e_description = tr("\
-    openpilot defaults to driving in <b>chill mode</b>.\
-    Experimental mode enables <b>alpha-level features</b> that aren't ready for chill mode. \
-    Experimental features are listed below: \
-    <br> \
-    <h4>🌮 End-to-End Longitudinal Control 🌮</h4> \
-    Let the driving model control the gas and brakes. openpilot will drive as it thinks a human would, including stopping for red lights and stop signs. \
-    Since the driving model decides the speed to drive, the set speed will only act as an upper bound. This is an alpha quality feature; mistakes should be expected. \
-    <br> \
-    <h4>New Driving Visualization</h4> \
-    The driving visualization will transition to the road-facing wide-angle camera at low speeds to better show some turns. The Experimental mode logo will also be shown in the top right corner.\
-    ");
+  const QString e2e_description = QString("%1<br>"
+                                          "<h4>%2</h4><br>"
+                                          "%3<br>"
+                                          "<h4>%4</h4><br>"
+                                          "%5")
+                                  .arg(tr("openpilot defaults to driving in <b>chill mode</b>. Experimental mode enables <b>alpha-level features</b> that aren't ready for chill mode. Experimental features are listed below:"))
+                                  .arg(tr("🌮 End-to-End Longitudinal Control 🌮"))
+                                  .arg(tr("Let the driving model control the gas and brakes. openpilot will drive as it thinks a human would, including stopping for red lights and stop signs. "
+                                       "Since the driving model decides the speed to drive, the set speed will only act as an upper bound. This is an alpha quality feature; mistakes should be expected."))
+                                  .arg(tr("New Driving Visualization"))
+                                  .arg(tr("The driving visualization will transition to the road-facing wide-angle camera at low speeds to better show some turns. The Experimental mode logo will also be shown in the top right corner."));
 
   auto cp_bytes = params.get("CarParamsPersistent");
   if (!cp_bytes.empty()) {
@@ -415,9 +414,6 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
   TogglesPanel *toggles = new TogglesPanel(this);
   QObject::connect(this, &SettingsWindow::expandToggleDescription, toggles, &TogglesPanel::expandToggleDescription);
 
-  TogglesPanel *toggles = new TogglesPanel(this);
-  QObject::connect(this, &SettingsWindow::expandToggleDescription, toggles, &TogglesPanel::expandToggleDescription);
-
   QList<QPair<QString, QWidget *>> panels = {
     {tr("Device"), device},
     {tr("Network"), new Networking(this)},
@@ -531,13 +527,12 @@ CommunityPanel::CommunityPanel(SettingsWindow *parent) : ListWidget(parent) {
   addItem(changeCar);
 
   // param, title, desc, icon
-  std::vector<std::tuple<QString, QString, QString, QString, bool>> toggle_defs{
+  std::vector<std::tuple<QString, QString, QString, QString>> toggle_defs{
     {
       "UseLanelines",
       tr("Use lane lines instead of e2e"),
       "",
       "../assets/offroad/icon_openpilot.png",
-      false,
     },
 
     {
@@ -545,7 +540,6 @@ CommunityPanel::CommunityPanel(SettingsWindow *parent) : ListWidget(parent) {
       tr("SCC on BUS 2"),
       tr("If SCC is on bus 2, turn it on."),
       "../assets/offroad/icon_road.png",
-      false,
     },
 
     {
@@ -553,33 +547,29 @@ CommunityPanel::CommunityPanel(SettingsWindow *parent) : ListWidget(parent) {
       tr("Openpilot controls Cruise State (Experimental)"),
       tr("Openpilot controls cruise on/off, gap and set speed."),
       "../assets/offroad/icon_road.png",
-      false,
     },
     {
       "IsLdwsCar",
       tr("LDWS only"),
       tr("If your car only supports LDWS, turn it on."),
       "../assets/offroad/icon_warning.png",
-      false,
     },
     {
       "HapticFeedbackWhenSpeedCamera",
       tr("Haptic feedback (speed-cam alert)"),
       tr("Haptic feedback when a speed camera is detected"),
       "../assets/offroad/icon_openpilot.png",
-      false,
     },
     {
       "ShowDebugMessage",
       tr("Show Debug Message"),
       "",
       "../assets/offroad/icon_shell.png",
-      false,
     },
   };
 
-  for (auto &[param, title, desc, icon, confirm] : toggle_defs) {
-    auto toggle = new ParamControl(param, title, desc, icon, confirm, this);
+  for (auto &[param, title, desc, icon] : toggle_defs) {
+    auto toggle = new ParamControl(param, title, desc, icon, this);
 
     bool locked = params.getBool((param + "Lock").toStdString());
     toggle->setEnabled(!locked);
