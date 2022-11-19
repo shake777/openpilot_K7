@@ -291,6 +291,11 @@ class CarInterfaceBase(ABC):
         elif not cs_out.cruiseState.enabled and self.CS.out.cruiseState.enabled:
           events.add(EventName.cruiseOff)
 
+    # Auto-Engage when cruise available and above 10km/h
+    if cs_out.cruiseState.available:
+      if cs_out.gearShifter == GearShifter.drive and cs_out.vEgo > 2.777778:
+        events.add(EventName.pcmEnable)
+
     return events
 
 
