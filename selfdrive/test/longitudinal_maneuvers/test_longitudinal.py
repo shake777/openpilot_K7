@@ -10,7 +10,7 @@ from selfdrive.test.longitudinal_maneuvers.maneuver import Maneuver
 # TODO: make new FCW tests
 maneuvers = [
   Maneuver(
-    'approach stopped car at 25m/s, initial distance: 120m',
+    'approach stopped car at 20m/s, initial distance: 120m',
     duration=20.,
     initial_speed=25.,
     lead_relevancy=True,
@@ -118,13 +118,6 @@ maneuvers = [
     breakpoints=[1., 10., 15.],
     ensure_start=True,
   ),
-  Maneuver(
-    'cruising at 25 m/s while disabled',
-    duration=20.,
-    initial_speed=25.,
-    lead_relevancy=False,
-    enabled=False,
-  ),
 ]
 
 
@@ -135,10 +128,10 @@ class LongitudinalControl(unittest.TestCase):
     os.environ['SKIP_FW_QUERY'] = "1"
     os.environ['NO_CAN_TIMEOUT'] = "1"
 
-    params = Params()
-    params.clear_all()
-    params.put_bool("Passive", bool(os.getenv("PASSIVE")))
-    params.put_bool("OpenpilotEnabledToggle", True)
+    #params = Params()
+    #params.clear_all()
+    #params.put_bool("Passive", bool(os.getenv("PASSIVE")))
+    #params.put_bool("OpenpilotEnabledToggle", True)
 
   # hack
   def test_longitudinal_setup(self):
@@ -150,11 +143,11 @@ def run_maneuver_worker(k):
     params = Params()
 
     man = maneuvers[k]
-    params.put_bool("ExperimentalMode", True)
+    params.put_bool("ExperimentalLongitudinalEnabled", True)
     print(man.title, ' in e2e mode')
     valid, _ = man.evaluate()
     self.assertTrue(valid, msg=man.title)
-    params.put_bool("ExperimentalMode", False)
+    params.put_bool("ExperimentalLongitudinalEnabled", False)
     print(man.title, ' in acc mode')
     valid, _ = man.evaluate()
     self.assertTrue(valid, msg=man.title)
