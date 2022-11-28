@@ -1964,6 +1964,11 @@ struct EncodeData {
 struct UserFlag {
 }
 
+struct Microphone {
+  ambientNoiseLevelRaw @0 :Float32;
+  filteredAmbientNoiseLevel @1 :Float32;
+}
+
 struct Event {
   logMonoTime @0 :UInt64;  # nanoseconds
   valid @67 :Bool = true;
@@ -2023,6 +2028,9 @@ struct Event {
     wideRoadEncodeIdx @77 :EncodeIndex;
     qRoadEncodeIdx @90 :EncodeIndex;
 
+    # microphone data
+    microphone @103 :Microphone;
+
     # systems stuff
     androidLog @20 :AndroidLogEntry;
     managerState @78 :ManagerState;
@@ -2041,9 +2049,9 @@ struct Event {
     # UI services
     userFlag @93 :UserFlag;
     uiDebug @102 :UIDebug;
-    
+
     # neokii
-    naviData @103 :NaviData;
+    naviData @104 :NaviData;
 
     # *********** debug ***********
     testJoystick @52 :Joystick;
