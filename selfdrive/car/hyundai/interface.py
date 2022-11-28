@@ -286,6 +286,7 @@ class CarInterface(CarInterfaceBase):
       ret.hasAutoHold = 1151 in fingerprint[0]
       ret.hasLfaHda = 1157 in fingerprint[0]
       ret.hasHda = 1157 in fingerprint[0] or candidate in FEATURES['has_hda']
+      ret.hasNav = 1348 in fingerprint[0]
 
       if not ret.openpilotLongitudinalControl:
         ret.radarOffCan = ret.sccBus == -1
