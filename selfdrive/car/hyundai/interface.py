@@ -237,7 +237,7 @@ class CarInterface(CarInterfaceBase):
       ret.longitudinalTuning.kpV = [1.2, 1.05, 1.0, 0.92, 0.55]
       ret.longitudinalTuning.kiBP = [0., 130. * CV.KPH_TO_MS]
       ret.longitudinalTuning.kiV = [0.1, 0.05]
-      ret.stoppingDecelRate = 0.2
+      ret.stoppingDecelRate = 0.1
 
       ret.steerActuatorDelay = 0.4
       ret.steerLimitTimer = 3.0
@@ -249,10 +249,10 @@ class CarInterface(CarInterfaceBase):
 
     ret.stoppingControl = True
     ret.startingState = True
-    ret.vEgoStarting = 0.3
-    ret.vEgoStopping = 0.5
+    ret.vEgoStarting = 0.5
+    ret.vEgoStopping = 0.7
     ret.startAccel = 1.2
-    ret.longitudinalActuatorDelayLowerBound = 0.5
+    ret.longitudinalActuatorDelayLowerBound = 0.4
     ret.longitudinalActuatorDelayUpperBound = 0.3
 
     # *** feature detection ***
@@ -392,5 +392,6 @@ class CarInterface(CarInterfaceBase):
       "CRUISE_BUTTONS": button,
     }
     return self.CC.packer.make_can_msg("CRUISE_BUTTONS", 5, values)
+
 
 
