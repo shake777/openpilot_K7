@@ -32,7 +32,7 @@ def create_hda_mfc(packer, enabled, active, CS, left_lane, right_lane):
   values["HDA_VSetReq"] = enabled
 
   if active > 1 and CS.out.cruiseState.enabled:
-    values["HDA_Active"] = 0
+    values["HDA_Active"] = 1
     values["HDA_Icon_Wheel"] = 1
     values["HDA_Icon_State"] = 2
     values["HDA_Chime"] = 1
@@ -49,7 +49,7 @@ def create_hda_mfc(packer, enabled, active, CS, left_lane, right_lane):
 
   return packer.make_can_msg("LFAHDA_MFC", 0, values)
 def create_acc_commands(packer, enabled, accel, upper_jerk, idx, lead_visible,
-                        set_speed, stopping, long_override, CS, stock_cam):
+                        set_speed, stopping, long_override, CS, stock_cam, active):
   commands = []
 
   cruise_enabled = enabled and CS.out.cruiseState.enabled
@@ -69,7 +69,7 @@ def create_acc_commands(packer, enabled, accel, upper_jerk, idx, lead_visible,
   #values["ACC_ObjRelSpd"] = 10,
   #values["ACC_ObjDist"] = 50,  # close lead makes controls tighter
 
-  if not stock_cam:
+  if not stock_cam and active < 2:
     active_cam = SpeedLimiter.instance().get_cam_active()
     values["Navi_SCC_Camera_Act"] = 2 if active_cam else 0
     values["Navi_SCC_Camera_Status"] = 2 if active_cam else 0

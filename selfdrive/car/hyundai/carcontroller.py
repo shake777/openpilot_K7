@@ -208,9 +208,10 @@ class CarController:
                                                         hud_control.leadVisible, set_speed_in_units, stopping,
                                                           CC.cruiseControl.override, CS, stock_cam))
         else:
+          activated_hda = SpeedLimiter.instance().get_active()
           can_sends.extend(hyundaiexcan.create_acc_commands(self.packer, CC.enabled, accel, jerk, int(self.frame / 2),
                                                           hud_control.leadVisible, set_speed_in_units, stopping,
-                                                          CC.cruiseControl.override, CS, stock_cam))
+                                                          CC.cruiseControl.override, CS, stock_cam, activated_hda))
 
       # 5 Hz ACC options
       if self.frame % 20 == 0 and self.CP.openpilotLongitudinalControl:
