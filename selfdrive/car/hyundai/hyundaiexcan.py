@@ -3,6 +3,9 @@ import copy
 from selfdrive.controls.neokii.cruise_state_manager import CruiseStateManager
 from selfdrive.controls.neokii.navi_controller import SpeedLimiter
 
+from selfdrive.controls.neokii.cruise_state_manager import CruiseStateManager
+from selfdrive.controls.neokii.navi_controller import SpeedLimiter
+
 hyundai_checksum = crcmod.mkCrcFun(0x11D, initCrc=0xFD, rev=False, xorOut=0xdf)
 
 def create_mdps12(packer, frame, mdps12):
@@ -102,7 +105,6 @@ def create_acc_commands(packer, enabled, accel, upper_jerk, idx, lead_visible,
     if enabled:
       values["ACCMode"] = 2 if CS.out.gasPressed and (accel > -0.2) else 1
       values["ObjGap"] = obj_gap
-      values["ObjGap2"] = 1 if obj_gap else 0
       if stopping:
         values["JerkUpperLimit"] = 0.5
         values["JerkLowerLimit"] = 10.
