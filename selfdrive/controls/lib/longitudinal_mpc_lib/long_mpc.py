@@ -47,7 +47,7 @@ CRUISE_GAP_BP = [1., 2., 3., 4.]
 CRUISE_GAP_V = [1.0, 1.2, 1.5, 1.8]
 CRUISE_GAP_E2E_V = [1.4, 1.7, 2.0, 2.5]
 
-DIFF_RADAR_VISION = 2.0
+DIFF_RADAR_VISION = 1.5
 
 
 # Fewer timestamps don't hurt performance and lead to
