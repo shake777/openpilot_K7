@@ -1954,6 +1954,11 @@ struct NavRoute {
   }
 }
 
+struct MapRenderState {
+  locationMonoTime @0 :UInt64;
+  renderTime @1 :Float32;
+}
+
 struct NavModelData {
   frameId @0 :UInt32;
   modelExecutionTime @1 :Float32;
@@ -2068,13 +2073,14 @@ struct Event {
     navInstruction @82 :NavInstruction;
     navRoute @83 :NavRoute;
     navThumbnail @84: Thumbnail;
+    mapRenderState @105: MapRenderState;
 
     # UI services
     userFlag @93 :UserFlag;
     uiDebug @102 :UIDebug;
 
     # neokii
-    naviData @105 :NaviData;
+    naviData @106 :NaviData;
 
     # *********** debug ***********
     testJoystick @52 :Joystick;
