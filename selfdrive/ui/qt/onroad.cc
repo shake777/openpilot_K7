@@ -1210,7 +1210,7 @@ void AnnotatedCameraWidget::drawGpsStatus(QPainter &p) {
   p.save();
 
   p.setOpacity(0.8);
-  p.drawPixmap(x, y, w, h, ic_satellite);
+  p.drawPixmap(x, y, w, h, sm["controlsState"].getControlsState().getExperimentalMode() ? experimental_img : ic_satellite);
 
   configFont(p, "Inter", 40, "Bold");
   p.setPen(QColor(255, 255, 255, 200));
