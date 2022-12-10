@@ -19,7 +19,7 @@ from selfdrive.controls.ntune import nTune
 # move it at all, this is compensated for too.
 
 LOW_SPEED_X = [0, 10, 20, 30]
-LOW_SPEED_Y = [15, 13, 10, 5]
+LOW_SPEED_Y = [40, 25, 10, 5]
 
 
 class LatControlTorque(LatControl):
