@@ -1970,6 +1970,7 @@ struct NavRoute {
 struct MapRenderState {
   locationMonoTime @0 :UInt64;
   renderTime @1 :Float32;
+  frameId @2: UInt32;
 }
 
 struct NavModelData {
