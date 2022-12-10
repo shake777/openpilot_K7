@@ -52,7 +52,7 @@ class CruiseStateManager:
 
     self.prev_brake_pressed = False
 
-	# CRZ AUTO-SET by Tenesi
+    # CRZ AUTO-SET by Tenesi
     self.prev_cancel = False
     self.cruise_auto = False
 
@@ -99,7 +99,7 @@ class CruiseStateManager:
 
     CS.cruiseState.available = self.available
 
-	# CRZ AUTO-SET by Tenesi
+    # CRZ AUTO-SET by Tenesi
     ascc_auto_set = (CS.vEgoCluster * CV.MS_TO_KPH > 30) and CS.gasPressed
     # 1회 수동 크루즈 인게이지 후 가속페달 작동시... 앞차가 있는 경우에 자동 크루즈셋및 시속 30이상시 이전 속도로 셋한다..
     if not self.prev_cancel and self.cruise_auto: # 캔슬버튼을 누르지 않았다면...초기 false상태에서 오토셋은 작동한다..
@@ -185,11 +185,12 @@ class CruiseStateManager:
 
     if btn == ButtonType.cancel:
       self.enabled = False
-	  # CRZ AUTO-SET by Tenesi
-      if self.prev_cancel: #      최초 초기상태는 False이고 캔슬로 입력받으면 True로 전환됨..
-        self.prev_cancel = False #다시 버튼이 누르면 False가 되고 다시 버튼을 누르면 True가 됨
-      else:
-        self.prev_cancel = True
+      self.cruise_auto = False
+      # # CRZ AUTO-SET by Tenesi
+      # if self.prev_cancel:       #최초 초기상태는 False이고 캔슬로 입력받으면 True로 전환됨..
+      #   self.prev_cancel = False #다시 버튼이 누르면 False가 되고 다시 버튼을 누르면 True가 됨
+      # else:
+      #   self.prev_cancel = True
 
     v_cruise_kph = clip(round(v_cruise_kph, 1), V_CRUISE_MIN_CRUISE_STATE, V_CRUISE_MAX)
     self.speed = v_cruise_kph * CV.KPH_TO_MS
