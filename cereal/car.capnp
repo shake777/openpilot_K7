@@ -384,7 +384,6 @@ struct CarControl {
       stopping @2;
       starting @3;
     }
-
   }
 
   struct CruiseControl {
