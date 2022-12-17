@@ -2756,6 +2756,17 @@ poetry = ">=1.2.0,<2.0.0"
 poetry-core = ">=1.1.0,<2.0.0"
 
 [[package]]
+name = "polyline"
+version = "1.4.0"
+description = "A Python implementation of Google's Encoded Polyline Algorithm Format."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+six = ">=1.8.0"
+
+[[package]]
 name = "portalocker"
 version = "2.6.0"
 description = "Wraps the portalocker recipe for easy usage"
@@ -4414,7 +4425,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "~3.8"
-content-hash = "331a7b700c17c618a4f0fa7d0ec3e5b585c1dc467f6f03261c3778f729058f55"
+content-hash = "d894380c87f5558e032708cc1230aed172ad3e1db9aa112e2e105bebefff4e20"
 
 [metadata.files]
 adal = [
@@ -6667,6 +6678,10 @@ poetry-plugin-export = [
     {file = "poetry-plugin-export-1.1.2.tar.gz", hash = "sha256:5e92525dd63f38ce74a51ed68ea91d753523f21ce5f9ef8d3b793e2a4b2222ef"},
     {file = "poetry_plugin_export-1.1.2-py3-none-any.whl", hash = "sha256:946e3313b3d00c18fb9a50522e9d5e6a7e111beaba8d6ae33297662fc2070ac1"},
 ]
+polyline = [
+    {file = "polyline-1.4.0-py2.py3-none-any.whl", hash = "sha256:6559a0d5d37f4d14255744b3c6a648d5ff480d3d5c5f30186effc72a4142fd6c"},
+    {file = "polyline-1.4.0.tar.gz", hash = "sha256:7c7f89d09a09c7b6161bdbfb4fd304b186fc7a2060fa4f31cb3f61c646a5c074"},
+]
 portalocker = [
     {file = "portalocker-2.6.0-py2.py3-none-any.whl", hash = "sha256:102ed1f2badd8dec9af3d732ef70e94b215b85ba45a8d7ff3c0003f19b442f4e"},
     {file = "portalocker-2.6.0.tar.gz", hash = "sha256:964f6830fb42a74b5d32bce99ed37d8308c1d7d44ddf18f3dd89f4680de97b39"},
@@ -6795,7 +6810,6 @@ pycryptodome = [
     {file = "pycryptodome-3.15.0-cp27-cp27m-manylinux2010_i686.whl", hash = "sha256:7c9ed8aa31c146bef65d89a1b655f5f4eab5e1120f55fc297713c89c9e56ff0b"},
     {file = "pycryptodome-3.15.0-cp27-cp27m-manylinux2010_x86_64.whl", hash = "sha256:5099c9ca345b2f252f0c28e96904643153bae9258647585e5e6f649bb7a1844a"},
     {file = "pycryptodome-3.15.0-cp27-cp27m-manylinux2014_aarch64.whl", hash = "sha256:2ec709b0a58b539a4f9d33fb8508264c3678d7edb33a68b8906ba914f71e8c13"},
-    {file = "pycryptodome-3.15.0-cp27-cp27m-musllinux_1_1_aarch64.whl", hash = "sha256:2ae53125de5b0d2c95194d957db9bb2681da8c24d0fb0fe3b056de2bcaf5d837"},
     {file = "pycryptodome-3.15.0-cp27-cp27m-win32.whl", hash = "sha256:fd2184aae6ee2a944aaa49113e6f5787cdc5e4db1eb8edb1aea914bd75f33a0c"},
     {file = "pycryptodome-3.15.0-cp27-cp27m-win_amd64.whl", hash = "sha256:7e3a8f6ee405b3bd1c4da371b93c31f7027944b2bcce0697022801db93120d83"},
     {file = "pycryptodome-3.15.0-cp27-cp27mu-manylinux1_i686.whl", hash = "sha256:b9c5b1a1977491533dfd31e01550ee36ae0249d78aae7f632590db833a5012b8"},
@@ -6803,14 +6817,12 @@ pycryptodome = [
     {file = "pycryptodome-3.15.0-cp27-cp27mu-manylinux2010_i686.whl", hash = "sha256:2aa55aae81f935a08d5a3c2042eb81741a43e044bd8a81ea7239448ad751f763"},
     {file = "pycryptodome-3.15.0-cp27-cp27mu-manylinux2010_x86_64.whl", hash = "sha256:c3640deff4197fa064295aaac10ab49a0d55ef3d6a54ae1499c40d646655c89f"},
     {file = "pycryptodome-3.15.0-cp27-cp27mu-manylinux2014_aarch64.whl", hash = "sha256:045d75527241d17e6ef13636d845a12e54660aa82e823b3b3341bcf5af03fa79"},
-    {file = "pycryptodome-3.15.0-cp27-cp27mu-musllinux_1_1_aarch64.whl", hash = "sha256:eb6fce570869e70cc8ebe68eaa1c26bed56d40ad0f93431ee61d400525433c54"},
     {file = "pycryptodome-3.15.0-cp35-abi3-macosx_10_9_x86_64.whl", hash = "sha256:9ee40e2168f1348ae476676a2e938ca80a2f57b14a249d8fe0d3cdf803e5a676"},
     {file = "pycryptodome-3.15.0-cp35-abi3-manylinux1_i686.whl", hash = "sha256:4c3ccad74eeb7b001f3538643c4225eac398c77d617ebb3e57571a897943c667"},
     {file = "pycryptodome-3.15.0-cp35-abi3-manylinux1_x86_64.whl", hash = "sha256:1b22bcd9ec55e9c74927f6b1f69843cb256fb5a465088ce62837f793d9ffea88"},
     {file = "pycryptodome-3.15.0-cp35-abi3-manylinux2010_i686.whl", hash = "sha256:57f565acd2f0cf6fb3e1ba553d0cb1f33405ec1f9c5ded9b9a0a5320f2c0bd3d"},
     {file = "pycryptodome-3.15.0-cp35-abi3-manylinux2010_x86_64.whl", hash = "sha256:4b52cb18b0ad46087caeb37a15e08040f3b4c2d444d58371b6f5d786d95534c2"},
     {file = "pycryptodome-3.15.0-cp35-abi3-manylinux2014_aarch64.whl", hash = "sha256:092a26e78b73f2530b8bd6b3898e7453ab2f36e42fd85097d705d6aba2ec3e5e"},
-    {file = "pycryptodome-3.15.0-cp35-abi3-musllinux_1_1_aarch64.whl", hash = "sha256:50ca7e587b8e541eb6c192acf92449d95377d1f88908c0a32ac5ac2703ebe28b"},
     {file = "pycryptodome-3.15.0-cp35-abi3-win32.whl", hash = "sha256:e244ab85c422260de91cda6379e8e986405b4f13dc97d2876497178707f87fc1"},
     {file = "pycryptodome-3.15.0-cp35-abi3-win_amd64.whl", hash = "sha256:c77126899c4b9c9827ddf50565e93955cb3996813c18900c16b2ea0474e130e9"},
     {file = "pycryptodome-3.15.0-pp27-pypy_73-macosx_10_9_x86_64.whl", hash = "sha256:9eaadc058106344a566dc51d3d3a758ab07f8edde013712bc8d22032a86b264f"},
