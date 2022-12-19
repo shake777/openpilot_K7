@@ -3,7 +3,7 @@ from selfdrive.car.hyundai.values_community import CAR
 from common.conversions import Conversions as CV
 
 def get_params(candidate, ret):
-  tire_stiffness_factor = 0.8
+  tire_stiffness_factor = 0.9
   ret.steerRatio = 16.
 
   if candidate in CAR.ELANTRA_GT_I30:
@@ -25,10 +25,10 @@ def get_params(candidate, ret):
     tire_stiffness_factor = 0.8
     ret.centerToFront = ret.wheelbase * 0.385
   elif candidate == CAR.GENESIS_EQ900:
-    ret.mass = 2200
-    ret.wheelbase = 3.15
+    ret.mass = 2300
+    ret.wheelbase = 3.3
     ret.steerRatio = 16.0
-    ret.steerActuatorDelay = 0.05
+    ret.steerActuatorDelay = 0.45
   elif candidate == CAR.GENESIS_EQ900_L:
     ret.mass = 2290
     ret.wheelbase = 3.45
