@@ -566,6 +566,12 @@ CommunityPanel::CommunityPanel(SettingsWindow *parent) : ListWidget(parent) {
       "",
       "../assets/offroad/icon_shell.png",
     },
+    {
+      "ShowTurnSignal",
+      tr("Show Turnsignal"),
+      "",
+      "../assets/offroad/icon_shell.png",
+    },
   };
 
   for (auto &[param, title, desc, icon] : toggle_defs) {

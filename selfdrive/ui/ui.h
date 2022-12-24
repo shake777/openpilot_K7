@@ -139,6 +139,7 @@ public:
   QTransform car_space_transform;
   bool wide_cam_only;
   bool recording = false;
+  bool show_turnsignal = false; //boxkon
 
 signals:
   void uiUpdate(const UIState &s);

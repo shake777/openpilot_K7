@@ -568,6 +568,8 @@ void AnnotatedCameraWidget::drawHud(QPainter &p, const cereal::ModelDataV2::Read
   drawDeviceState(p);
   //drawTurnSignals(p);
   drawGpsStatus(p);
+  if(s->show_turnsignal) // boxkon
+    drawTurnSignals(p);
   drawDebugText(p);
 
   const auto controls_state = sm["controlsState"].getControlsState();
