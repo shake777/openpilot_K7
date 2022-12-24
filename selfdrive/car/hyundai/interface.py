@@ -247,8 +247,8 @@ class CarInterface(CarInterfaceBase):
       ret.longitudinalTuning.kiV = [0.1, 0.05]
       ret.stoppingDecelRate = 0.1
 
-      ret.steerActuatorDelay = 0.4
-      ret.steerLimitTimer = 3.0
+      ret.steerActuatorDelay = 0.2
+      ret.steerLimitTimer = 0.5
 
       ret.experimentalLongitudinalAvailable = True #candidate not in (LEGACY_SAFETY_MODE_CAR)
 
@@ -257,9 +257,9 @@ class CarInterface(CarInterfaceBase):
 
     ret.stoppingControl = True
     ret.startingState = True
-    ret.vEgoStarting = 0.5
-    ret.vEgoStopping = 0.7
-    ret.startAccel = 1.2
+    ret.vEgoStarting = 0.4
+    ret.vEgoStopping = 0.6
+    ret.startAccel = 1.15
     ret.longitudinalActuatorDelayLowerBound = 0.4
     ret.longitudinalActuatorDelayUpperBound = 0.3
 
