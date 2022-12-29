@@ -16,9 +16,9 @@ class CarControllerParams:
   ACCEL_MIN = -3.5 # m/s^2
   ACCEL_MAX = 2.0 # m/s^2
 
-  def __init__(self, CP):
-    self.STEER_DELTA_UP = 4.5
-    self.STEER_DELTA_DOWN = 8
+  def __init__(self, CP, vEgoRaw=100.):
+    self.STEER_DELTA_UP = 3.5
+    self.STEER_DELTA_DOWN = 7
     self.STEER_DRIVER_ALLOWANCE = 50
     self.STEER_DRIVER_MULTIPLIER = 2
     self.STEER_DRIVER_FACTOR = 1
@@ -52,7 +52,11 @@ class CarControllerParams:
 
     # Default for most HKG
     else:
-      self.STEER_MAX = 409
+      self.STEER_MAX = 409 if vEgoRaw < 17. else 384
+      self.STEER_DRIVER_ALLOWANCE = 350
+      self.STEER_THRESHOLD = 350
+      self.STEER_DELTA_UP = 7 if vEgoRaw < 17. else 3
+      self.STEER_DELTA_DOWN = 8 if vEgoRaw < 17. else 7
 
 
 class HyundaiFlags(IntFlag):

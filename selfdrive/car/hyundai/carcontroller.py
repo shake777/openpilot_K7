@@ -22,7 +22,7 @@ LongCtrlState = car.CarControl.Actuators.LongControlState
 # All slightly below EPS thresholds to avoid fault
 MAX_ANGLE = 85
 MAX_ANGLE_FRAMES = 89
-MAX_ANGLE_CONSECUTIVE_FRAMES = 3
+MAX_ANGLE_CONSECUTIVE_FRAMES = 2
 
 
 def process_hud_alert(enabled, fingerprint, hud_control):
@@ -78,8 +78,11 @@ class CarController:
     hud_control = CC.hudControl
 
     # steering torque
-    new_steer = int(round(actuators.steer * self.params.STEER_MAX))
+    steer = actuators.steer
+    self.params = CarControllerParams(self.CP, CS.out.vEgoRaw)
+    new_steer = int(round(steer * self.params.STEER_MAX))
     apply_steer = apply_std_steer_torque_limits(new_steer, self.apply_steer_last, CS.out.steeringTorque, self.params)
+    apply_steer = clip(apply_steer, -self.params.STEER_MAX, self.params.STEER_MAX)
 
     if not CC.latActive:
       apply_steer = 0
