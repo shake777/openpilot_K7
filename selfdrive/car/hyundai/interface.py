@@ -247,7 +247,7 @@ class CarInterface(CarInterfaceBase):
       ret.longitudinalTuning.kiV = [0.1, 0.05]
       ret.stoppingDecelRate = 0.1
 
-      ret.steerActuatorDelay = 0.2
+      ret.steerActuatorDelay = 0.15
       ret.steerLimitTimer = 0.5
 
       ret.experimentalLongitudinalAvailable = True #candidate not in (LEGACY_SAFETY_MODE_CAR)
